@@ -1,0 +1,2 @@
+multi_robot
+-DCATKIN_DEVEL_PREFIX=/home/james/multi_robot_ws/devel -DCMAKE_INSTALL_PREFIX=/home/james/multi_robot_ws/install -G Unix Makefiles

@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/james/multi_robot_ws/install/setup.sh
