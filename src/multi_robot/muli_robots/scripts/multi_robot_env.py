@@ -13,6 +13,21 @@ from sensor_msgs.msg import LaserScan
 
 from gym.utils import seeding
 
+#import logging
+from gym.envs.registration import register
+
+#logger = logging.getLogger(__name__)
+
+# Gazebo
+# ----------------------------------------
+
+# Turtlebot envs
+register(
+    id='MultiRobot-v0',
+    entry_point='multi_robot:MultiRobotEnv',
+    # More arguments here
+)
+
 class MultiRobotEnv(gazebo_env.GazeboEnv):
 
     def __init__(self):

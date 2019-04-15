@@ -9,6 +9,17 @@ import time
 import liveplot
 import qlearn
 
+#import multi_robot
+#import multi_robot.robot_envs
+import multi_robot_env
+#from gym.envs.registration import register
+
+#register(
+#    id='MultiRobot-v0',
+#    entry_point='multi_robot:MultiRobotEnv',
+    # More arguments here
+#)
+
 def render():
     render_skip = 0 #Skip first X episodes.
     render_interval = 50 #Show render Every Y episodes.
