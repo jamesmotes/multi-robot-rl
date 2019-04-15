@@ -5,7 +5,7 @@ import time
 import numpy as np
 
 from gym import utils, spaces
-from gym_gazebo.envs import gazebo_env
+import gazebo_env
 from geometry_msgs.msg import Twist
 from std_srvs.srv import Empty
 
