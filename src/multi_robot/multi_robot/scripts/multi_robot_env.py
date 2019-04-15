@@ -35,11 +35,12 @@ class MultiRobotEnv(gazebo_env.GazeboEnv):
         gazebo_env.GazeboEnv.__init__(self, "multi_robot.launch")
         self.rob1_vel_pub = rospy.Publisher('/robot1/mobile_base/commands/velocity', Twist, queue_size=5)
         self.rob2_vel_pub = rospy.Publisher('/robot2/mobile_base/commands/velocity', Twist, queue_size=5)
+        self.publishers = [rob1_vel_pub, rob2_vel_pub]
         self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
         self.pause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
         self.reset_proxy = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
 
-        self.action_space = spaces.Discrete(3) #F,L,R
+        self.action_space = spaces.Discrete(16) #1,2 x S,F,L,R
         self.reward_range = (-np.inf, np.inf)
 
         self._seed()
@@ -65,6 +66,26 @@ class MultiRobotEnv(gazebo_env.GazeboEnv):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
 
+    def move_robot(self, robot, action):
+        vel_cmd = Twist()
+        robot = robot - 1
+        if action == 0: #STATIONARY
+            vel_cmd.linear.x = 0.0
+            vel_cmd.angular.z = 0.0
+        elif action == 1: #FORWARD 
+            vel_cmd = Twist()
+            vel_cmd.linear.x = 0.3
+            vel_cmd.angular.z = 0.0
+        elif action == 2: #LEFT 
+            vel_cmd = Twist()
+            vel_cmd.linear.x = 0.1
+            vel_cmd.angular.z = 0.3
+        elif action == 3: #RIGHT
+            vel_cmd = Twist()
+            vel_cmd.linear.x = 0.1
+            vel_cmd.angular.z = -0.3
+        self.publishers[robot].publish(vel_cmd)
+
     def step(self, action):
 
         rospy.wait_for_service('/gazebo/unpause_physics')
@@ -73,24 +94,71 @@ class MultiRobotEnv(gazebo_env.GazeboEnv):
         except (rospy.ServiceException) as e:
             print ("/gazebo/unpause_physics service call failed")
 
-        if action == 0: #FORWARD
-            vel_cmd = Twist()
-            vel_cmd.linear.x = 0.3
-            vel_cmd.angular.z = 0.0
-            self.rob1_vel_pub.publish(vel_cmd)
-            self.rob2_vel_pub.publish(vel_cmd)
-        elif action == 1: #LEFT
-            vel_cmd = Twist()
-            vel_cmd.linear.x = 0.1
-            vel_cmd.angular.z = 0.3
-            self.rob1_vel_pub.publish(vel_cmd)
-            self.rob2_vel_pub.publish(vel_cmd)
-        elif action == 2: #RIGHT
-            vel_cmd = Twist()
-            vel_cmd.linear.x = 0.1
-            vel_cmd.angular.z = -0.3
-            self.rob1_vel_pub.publish(vel_cmd)
-            self.rob2_vel_pub.publish(vel_cmd)
+        if action == 0: #1-STATIONARY 2-STATIONARY
+            self.move_robot(1,0)
+            self.move_robot(2,0)
+            
+        elif action == 1: #1-FORWARD 2-STATIONARY
+            self.move_robot(1,1)
+            self.move_robot(2,0)
+            
+        elif action == 2: #1-LEFT 2-STATIONARY
+            self.move_robot(1,2)
+            self.move_robot(2,0)
+           
+        elif action == 3: #1-RIGHT 2-STATIONARY
+            self.move_robot(1,3)
+            self.move_robot(2,0)
+
+        elif action == 4: #1-STATIONARY 2-FORWARD
+            self.move_robot(1,0)
+            self.move_robot(2,1)
+            
+        elif action == 5: #1-FORWARD 2-FORWARD
+            self.move_robot(1,1)
+            self.move_robot(2,1)
+            
+        elif action == 6: #1-LEFT 2-FORWARD
+            self.move_robot(1,2)
+            self.move_robot(2,1)
+           
+        elif action == 7: #1-RIGHT 2-FORWARD
+            self.move_robot(1,3)
+            self.move_robot(2,1)
+
+        elif action == 8: #1-STATIONARY 2-LEFT
+            self.move_robot(1,0)
+            self.move_robot(2,2)
+            
+        elif action == 9: #1-FORWARD 2-LEFT
+            self.move_robot(1,1)
+            self.move_robot(2,2)
+            
+        elif action == 10: #1-LEFT 2-LEFT
+            self.move_robot(1,2)
+            self.move_robot(2,2)
+           
+        elif action == 11: #1-RIGHT 2-LEFT
+            self.move_robot(1,3)
+            self.move_robot(2,2)
+
+        elif action == 12: #1-STATIONARY 2-RIGHT
+            self.move_robot(1,0)
+            self.move_robot(2,3)
+            
+        elif action == 13: #1-FORWARD 2-RIGHT
+            self.move_robot(1,1)
+            self.move_robot(2,3)
+            
+        elif action == 14: #1-LEFT 2-RIGHT
+            self.move_robot(1,2)
+            self.move_robot(2,3)
+           
+        elif action == 15: #1-RIGHT 2-RIGHT
+            self.move_robot(1,3)
+            self.move_robot(2,3)
+            
+
 
         data = None
         while data is None:
