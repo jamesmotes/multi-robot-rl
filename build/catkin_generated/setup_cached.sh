@@ -7,6 +7,4 @@
 # new environment variables
 
 # modified environment variables
-export LD_LIBRARY_PATH="/home/james/gym-gazebo/gym_gazebo/envs/installation/catkin_ws/devel/lib:/opt/ros/melodic/lib"
-export PKG_CONFIG_PATH="/home/james/gym-gazebo/gym_gazebo/envs/installation/catkin_ws/devel/lib/pkgconfig:/opt/ros/melodic/lib/pkgconfig"
 export PWD="/home/james/multi_robot_ws/build"
