@@ -9,7 +9,7 @@ import time
 import liveplot
 import qlearn
 
-#import multi_robot
+import multi_robot
 #import multi_robot.robot_envs
 import multi_robot_env
 #from gym.envs.registration import register
@@ -32,7 +32,7 @@ def render():
 
 if __name__ == '__main__':
 
-    env = gym.make('MultiRobot-v0')
+    env = gym.make('MyMultiRobot-v0')
 
 
     outdir = '~/multi_robot-rl/src/output'
