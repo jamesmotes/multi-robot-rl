@@ -10,6 +10,9 @@ from geometry_msgs.msg import Twist
 from std_srvs.srv import Empty
 
 from sensor_msgs.msg import LaserScan
+from nav_msgs.msg import Odometry
+from std_msgs.msg import Header
+from gazebo_msgs.srv import GetModelState, GetModelStateRequest
 
 from gym.utils import seeding
 
@@ -35,10 +38,16 @@ class MultiRobotEnv(gazebo_env.GazeboEnv):
         gazebo_env.GazeboEnv.__init__(self, "multi_robot.launch")
         self.rob1_vel_pub = rospy.Publisher('/robot1/mobile_base/commands/velocity', Twist, queue_size=5)
         self.rob2_vel_pub = rospy.Publisher('/robot2/mobile_base/commands/velocity', Twist, queue_size=5)
+
+        self.rob1_odom_pub=rospy.Publisher ('/robot1/my_odom', Odometry)
+        self.rob2_odom_pub=rospy.Publisher ('/robot2/my_odom', Odometry)
+
         self.publishers = [rob1_vel_pub, rob2_vel_pub]
         self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
         self.pause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
         self.reset_proxy = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
+
+        self.get_model_srv = rospy.ServiceProxy('gazebo/get_model_state', GetModelState)
 
         self.action_space = spaces.Discrete(9) #1,2 x F,L,R
         self.reward_range = (-np.inf, np.inf)
@@ -141,6 +150,21 @@ class MultiRobotEnv(gazebo_env.GazeboEnv):
         except:
             print("DIDN'T FIND ANYTHING FOR ODOM")
             pass
+
+
+        model1 = GetModelStateRequest()
+        model1.model_name = 'robot1'
+
+        results = None
+        while results is None:
+            try:
+                results = get_model_srv(model1)
+                print("RESULTS")
+                print(results)
+            except:
+                print("DIDNT FIND ANYTHING FOR RESULTS")
+                pass
+
 
         data = None
         while data is None:
