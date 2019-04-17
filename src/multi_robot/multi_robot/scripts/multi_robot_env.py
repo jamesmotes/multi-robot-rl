@@ -52,7 +52,7 @@ class MultiRobotEnv(gazebo_env.GazeboEnv):
 
         self._seed()
         self.steps = 0
-        self.max_steps = 100
+        self.max_steps = 1000
 
     def discretize_observation(self,data,new_ranges):
         print("DATA")
@@ -89,16 +89,21 @@ class MultiRobotEnv(gazebo_env.GazeboEnv):
         if distance < .2:
             done = True #crashed into each other
             reward = -10
-        elif distance > 2:
+            print("TOO CLOSE")
+        elif distance > 5:
             done = True #too far apart
             reward = -5
+            print("TOO FAR APART")
         elif distance < 1:
-            reward = 5/distance
+            reward = 10/distance
         else:
-            reward = 1/distance
+            reward = -1*distance
 
         if self.steps >= self.max_steps:
             done = True
+            print("REACHED MAX STEPS")
+            print(self.steps)
+            self.steps = 0
         return reward,done
 
     def configure_state(self, data1, data2):
@@ -143,7 +148,7 @@ class MultiRobotEnv(gazebo_env.GazeboEnv):
             vel_cmd.linear.x = 0.1
             vel_cmd.angular.z = -0.3
         self.publishers[robot-1].publish(vel_cmd)
-        p#rint("moving robot")
+        #print("moving robot")
         #print(robot-1)
 
     def step(self, action):

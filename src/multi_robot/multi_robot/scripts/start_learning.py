@@ -68,6 +68,7 @@ if __name__ == '__main__':
         state = ''.join(map(str, observation))
 
         #for i in range(500):
+        i = 0
         while(True):
             # Pick an action based on the current state
             action = qlearn.chooseAction(state)
@@ -90,7 +91,7 @@ if __name__ == '__main__':
             else:
                 last_time_steps = numpy.append(last_time_steps, [int(i + 1)])
                 break
-
+            i += 1
         if x % 100 == 0:
             plotter.plot(env)
 
