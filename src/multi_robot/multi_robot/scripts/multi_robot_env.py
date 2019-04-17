@@ -35,7 +35,7 @@ class MultiRobotEnv(gazebo_env.GazeboEnv):
         gazebo_env.GazeboEnv.__init__(self, "multi_robot.launch")
         self.rob1_vel_pub = rospy.Publisher('/robot1/mobile_base/commands/velocity', Twist, queue_size=5)
         self.rob2_vel_pub = rospy.Publisher('/robot2/mobile_base/commands/velocity', Twist, queue_size=5)
-        self.publishers = [rob1_vel_pub, rob2_vel_pub]
+        self.publishers = [self.rob1_vel_pub, self.rob2_vel_pub]
         self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
         self.pause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
         self.reset_proxy = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
@@ -68,7 +68,6 @@ class MultiRobotEnv(gazebo_env.GazeboEnv):
 
     def move_robot(self, robot, action):
         vel_cmd = Twist()
-        robot = robot - 1
         if action == 0: #STATIONARY
             vel_cmd.linear.x = 0.0
             vel_cmd.angular.z = 0.0
@@ -84,7 +83,9 @@ class MultiRobotEnv(gazebo_env.GazeboEnv):
             vel_cmd = Twist()
             vel_cmd.linear.x = 0.1
             vel_cmd.angular.z = -0.3
-        self.publishers[robot].publish(vel_cmd)
+        self.publishers[robot-1].publish(vel_cmd)
+        print("moving robot")
+        print(robot-1)
 
     def step(self, action):
 
