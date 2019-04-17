@@ -154,17 +154,17 @@ class MultiRobotEnv(gazebo_env.GazeboEnv):
 
 
         model1 = GetModelStateRequest()
-        model1.model_name = 'robot1'
+        model1.model_name = 'Robot1'
 
         results = None
-        while results is None:
-            try:
-                results = get_model_srv(model1)
-                print("RESULTS")
-                print(results)
-            except:
-                print("DIDNT FIND ANYTHING FOR RESULTS")
-                pass
+        #while results is None:
+        try:
+            results = self.get_model_srv(model1)
+            print("RESULTS")
+            print(results)
+        except:
+            print("DIDNT FIND ANYTHING FOR RESULTS")
+            pass
 
 
         data = None
