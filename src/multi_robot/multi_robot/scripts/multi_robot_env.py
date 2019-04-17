@@ -80,9 +80,9 @@ class MultiRobotEnv(gazebo_env.GazeboEnv):
         reward = 0
 
         done = False
-        x_diff = data1.pose.position[0] - data2.pose.position[0]
-        y_diff = data1.pose.position[1] - data2.pose.position[1]
-        z_diff = data1.pose.position[2] - data2.pose.position[2]
+        x_diff = data1.pose.position.x - data2.pose.position.x
+        y_diff = data1.pose.position.y - data2.pose.position.y
+        z_diff = data1.pose.position.z - data2.pose.position.z
         distance = math.sqrt(x_diff**2 + y_diff**2 + z_diff**2)
         if distance < .2:
             done = True #crashed into each other
@@ -94,7 +94,25 @@ class MultiRobotEnv(gazebo_env.GazeboEnv):
             reward = 1
         return reward,done
 
+    def configure_state(self, data1, data2):
+        state = []
+        state.append(data1.pose.position.x)
+        state.append(data1.pose.position.y)
+        state.append(data1.pose.position.z)
+        state.append(data1.pose.orientation.x)
+        state.append(data1.pose.orientation.y)
+        state.append(data1.pose.orientation.z)
+        state.append(data1.pose.orientation.w)
 
+        state.append(data2.pose.position.x)
+        state.append(data2.pose.position.y)
+        state.append(data2.pose.position.z)
+        state.append(data2.pose.orientation.x)
+        state.append(data2.pose.orientation.y)
+        state.append(data2.pose.orientation.z)
+        state.append(data2.pose.orientation.w)
+        
+        return state
 
     def _seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
@@ -207,8 +225,8 @@ class MultiRobotEnv(gazebo_env.GazeboEnv):
             print ("/gazebo/pause_physics service call failed")
 
         #state,done = self.discretize_observation(results1,results2,5)
-        reward,done = self.crashed(results1,results2)
-        state = results1 + results2
+        reward,done = self.reward(results1,results2)
+        state = self.configure_state(results1,results2)
         #if not done:
             #if action == 0:
             #    reward = 5
