@@ -98,7 +98,7 @@ class MultiRobotEnv(gazebo_env.GazeboEnv):
             print ("/gazebo/unpause_physics service call failed")
 
             
-        elif action == 0: #1-FORWARD 2-FORWARD
+        if action == 0: #1-FORWARD 2-FORWARD
             self.move_robot(1,1)
             self.move_robot(2,1)
             
