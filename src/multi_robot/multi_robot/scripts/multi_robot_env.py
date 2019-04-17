@@ -40,12 +40,14 @@ class MultiRobotEnv(gazebo_env.GazeboEnv):
         self.pause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
         self.reset_proxy = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
 
-        self.action_space = spaces.Discrete(16) #1,2 x S,F,L,R
+        self.action_space = spaces.Discrete(9) #1,2 x F,L,R
         self.reward_range = (-np.inf, np.inf)
 
         self._seed()
 
     def discretize_observation(self,data,new_ranges):
+        print("DATA")
+        print(data)
         discretized_ranges = []
         min_range = 0.2
         done = False
@@ -95,71 +97,51 @@ class MultiRobotEnv(gazebo_env.GazeboEnv):
         except (rospy.ServiceException) as e:
             print ("/gazebo/unpause_physics service call failed")
 
-        if action == 0: #1-STATIONARY 2-STATIONARY
-            self.move_robot(1,0)
-            self.move_robot(2,0)
             
-        elif action == 1: #1-FORWARD 2-STATIONARY
-            self.move_robot(1,1)
-            self.move_robot(2,0)
-            
-        elif action == 2: #1-LEFT 2-STATIONARY
-            self.move_robot(1,2)
-            self.move_robot(2,0)
-           
-        elif action == 3: #1-RIGHT 2-STATIONARY
-            self.move_robot(1,3)
-            self.move_robot(2,0)
-
-        elif action == 4: #1-STATIONARY 2-FORWARD
-            self.move_robot(1,0)
-            self.move_robot(2,1)
-            
-        elif action == 5: #1-FORWARD 2-FORWARD
+        elif action == 0: #1-FORWARD 2-FORWARD
             self.move_robot(1,1)
             self.move_robot(2,1)
             
-        elif action == 6: #1-LEFT 2-FORWARD
+        elif action == 1: #1-LEFT 2-FORWARD
             self.move_robot(1,2)
             self.move_robot(2,1)
            
-        elif action == 7: #1-RIGHT 2-FORWARD
+        elif action == 2: #1-RIGHT 2-FORWARD
             self.move_robot(1,3)
             self.move_robot(2,1)
-
-        elif action == 8: #1-STATIONARY 2-LEFT
-            self.move_robot(1,0)
-            self.move_robot(2,2)
             
-        elif action == 9: #1-FORWARD 2-LEFT
+        elif action == 3: #1-FORWARD 2-LEFT
             self.move_robot(1,1)
             self.move_robot(2,2)
             
-        elif action == 10: #1-LEFT 2-LEFT
+        elif action == 4: #1-LEFT 2-LEFT
             self.move_robot(1,2)
             self.move_robot(2,2)
            
-        elif action == 11: #1-RIGHT 2-LEFT
+        elif action == 5: #1-RIGHT 2-LEFT
             self.move_robot(1,3)
             self.move_robot(2,2)
-
-        elif action == 12: #1-STATIONARY 2-RIGHT
-            self.move_robot(1,0)
-            self.move_robot(2,3)
             
-        elif action == 13: #1-FORWARD 2-RIGHT
+        elif action == 6: #1-FORWARD 2-RIGHT
             self.move_robot(1,1)
             self.move_robot(2,3)
             
-        elif action == 14: #1-LEFT 2-RIGHT
+        elif action == 7: #1-LEFT 2-RIGHT
             self.move_robot(1,2)
             self.move_robot(2,3)
            
-        elif action == 15: #1-RIGHT 2-RIGHT
+        elif action == 8: #1-RIGHT 2-RIGHT
             self.move_robot(1,3)
             self.move_robot(2,3)
             
 
+        try:
+            odom = rospy.wait_for_message('/robot1/odom', Odom, timeout=5)
+            print("ODOM")
+            print(odom)
+        except:
+            print("DIDN'T FIND ANYTHING FOR ODOM")
+            pass
 
         data = None
         while data is None:
