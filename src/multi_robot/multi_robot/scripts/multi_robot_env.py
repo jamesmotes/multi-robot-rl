@@ -39,9 +39,6 @@ class MultiRobotEnv(gazebo_env.GazeboEnv):
         self.rob1_vel_pub = rospy.Publisher('/robot1/mobile_base/commands/velocity', Twist, queue_size=5)
         self.rob2_vel_pub = rospy.Publisher('/robot2/mobile_base/commands/velocity', Twist, queue_size=5)
 
-        self.rob1_odom_pub=rospy.Publisher ('/robot1/my_odom', Odometry)
-        self.rob2_odom_pub=rospy.Publisher ('/robot2/my_odom', Odometry)
-
         self.publishers = [self.rob1_vel_pub, self.rob2_vel_pub]
         self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
         self.pause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
@@ -72,6 +69,17 @@ class MultiRobotEnv(gazebo_env.GazeboEnv):
             if (min_range > data.ranges[i] > 0):
                 done = True
         return discretized_ranges,done
+
+
+    def reward(self,data1.data2):
+        print("DATA 1")
+        print(data1.pose)
+        print("DATA 2")
+        print(data2.pose)
+
+        done = False
+        
+
 
     def _seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
@@ -142,37 +150,39 @@ class MultiRobotEnv(gazebo_env.GazeboEnv):
         elif action == 8: #1-RIGHT 2-RIGHT
             self.move_robot(1,3)
             self.move_robot(2,3)
-            
-
-        try:
-            odom = rospy.wait_for_message('/robot1/odom', Odom, timeout=5)
-            print("ODOM")
-            print(odom)
-        except:
-            print("DIDN'T FIND ANYTHING FOR ODOM")
-            pass
 
 
         model1 = GetModelStateRequest()
         model1.model_name = 'Robot1'
 
-        results = None
-        #while results is None:
-        try:
-            results = self.get_model_srv(model1)
-            print("RESULTS")
-            print(results)
-        except:
-            print("DIDNT FIND ANYTHING FOR RESULTS")
-            pass
-
-
-        data = None
-        while data is None:
+        results1 = None
+        while results is None:
             try:
-                data = rospy.wait_for_message('/scan', LaserScan, timeout=5)
+                results1 = self.get_model_srv(model1)
+                #print("RESULTS 1")
+                #print(results1.pose)
             except:
                 pass
+
+        model2 = GetModelStateRequest()
+        model2.model_name = 'Robot2'
+
+        results2 = None
+        while result2 is None:
+            try:
+                results2 = self.get_model_srv(model2)
+                #print("RESULTS 2")
+                #print(results2.pose)
+            except:
+                pass
+
+
+        #data = None
+        #while data is None:
+        #    try:
+        #        data = rospy.wait_for_message('/scan', LaserScan, timeout=5)
+        #    except:
+        #        pass
 
         rospy.wait_for_service('/gazebo/pause_physics')
         try:
@@ -181,7 +191,8 @@ class MultiRobotEnv(gazebo_env.GazeboEnv):
         except (rospy.ServiceException) as e:
             print ("/gazebo/pause_physics service call failed")
 
-        state,done = self.discretize_observation(data,5)
+        #state,done = self.discretize_observation(data,5)
+        state,done = self.reward(results1,results2)
 
         if not done:
             if action == 0:
