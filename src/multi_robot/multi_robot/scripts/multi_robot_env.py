@@ -3,6 +3,7 @@ import rospy
 import roslaunch
 import time
 import numpy as np
+import math
 
 from gym import utils, spaces
 import gazebo_env
@@ -71,14 +72,28 @@ class MultiRobotEnv(gazebo_env.GazeboEnv):
         return discretized_ranges,done
 
 
-    def reward(self,data1.data2):
+    def reward(self,data1,data2):
         print("DATA 1")
         print(data1.pose)
         print("DATA 2")
         print(data2.pose)
+        reward = 0
 
         done = False
-        
+        x_diff = data1.pose.position[0] - data2.pose.position[0]
+        y_diff = data1.pose.position[1] - data2.pose.position[1]
+        z_diff = data1.pose.position[2] - data2.pose.position[2]
+        distance = math.sqrt(x_diff**2 + y_diff**2 + z_diff**2)
+        if distance < .2:
+            done = True #crashed into each other
+        elif distance > 3:
+            done = True #too far apart
+        elif distance < 1:
+            reward = 5
+        else:
+            reward = 1
+        return reward,done
+
 
 
     def _seed(self, seed=None):
@@ -156,7 +171,7 @@ class MultiRobotEnv(gazebo_env.GazeboEnv):
         model1.model_name = 'Robot1'
 
         results1 = None
-        while results is None:
+        while results1 is None:
             try:
                 results1 = self.get_model_srv(model1)
                 #print("RESULTS 1")
@@ -168,7 +183,7 @@ class MultiRobotEnv(gazebo_env.GazeboEnv):
         model2.model_name = 'Robot2'
 
         results2 = None
-        while result2 is None:
+        while results2 is None:
             try:
                 results2 = self.get_model_srv(model2)
                 #print("RESULTS 2")
@@ -191,16 +206,16 @@ class MultiRobotEnv(gazebo_env.GazeboEnv):
         except (rospy.ServiceException) as e:
             print ("/gazebo/pause_physics service call failed")
 
-        #state,done = self.discretize_observation(data,5)
-        state,done = self.reward(results1,results2)
-
-        if not done:
-            if action == 0:
-                reward = 5
-            else:
-                reward = 1
-        else:
-            reward = -200
+        #state,done = self.discretize_observation(results1,results2,5)
+        reward,done = self.crashed(results1,results2)
+        state = results1 + results2
+        #if not done:
+            #if action == 0:
+            #    reward = 5
+            #else:
+            #    reward = 1
+        #else:
+        #    reward = -200
 
         return state, reward, done, {}
 
