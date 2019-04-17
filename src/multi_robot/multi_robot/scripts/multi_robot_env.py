@@ -51,6 +51,8 @@ class MultiRobotEnv(gazebo_env.GazeboEnv):
         self.reward_range = (-np.inf, np.inf)
 
         self._seed()
+        self.steps = 0
+        self.max_steps = 100
 
     def discretize_observation(self,data,new_ranges):
         print("DATA")
@@ -73,10 +75,10 @@ class MultiRobotEnv(gazebo_env.GazeboEnv):
 
 
     def reward(self,data1,data2):
-        print("DATA 1")
-        print(data1.pose)
-        print("DATA 2")
-        print(data2.pose)
+        #print("DATA 1")
+        #print(data1.pose)
+        #print("DATA 2")
+        #print(data2.pose)
         reward = 0
 
         done = False
@@ -86,12 +88,17 @@ class MultiRobotEnv(gazebo_env.GazeboEnv):
         distance = math.sqrt(x_diff**2 + y_diff**2 + z_diff**2)
         if distance < .2:
             done = True #crashed into each other
-        elif distance > 3:
+            reward = -10
+        elif distance > 2:
             done = True #too far apart
+            reward = -5
         elif distance < 1:
-            reward = 5
+            reward = 5/distance
         else:
-            reward = 1
+            reward = 1/distance
+
+        if self.steps >= self.max_steps:
+            done = True
         return reward,done
 
     def configure_state(self, data1, data2):
@@ -136,10 +143,12 @@ class MultiRobotEnv(gazebo_env.GazeboEnv):
             vel_cmd.linear.x = 0.1
             vel_cmd.angular.z = -0.3
         self.publishers[robot-1].publish(vel_cmd)
-        print("moving robot")
-        print(robot-1)
+        p#rint("moving robot")
+        #print(robot-1)
 
     def step(self, action):
+
+        self.steps += 1
 
         rospy.wait_for_service('/gazebo/unpause_physics')
         try:
