@@ -15,7 +15,7 @@
   </include-->
 
   <!-- start gui -->
-  <node name="gazebo_gui" pkg="gazebo" type="gui" respawn="false" output="screen"/>
+  <!--node name="gazebo_gui" pkg="gazebo" type="gui" respawn="false" output="screen"/-->
 
   <!-- include our robots -->
   <include file="$(find multi_robot)/multi_robot/launch/robots.launch"/>
