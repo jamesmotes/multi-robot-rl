@@ -6,7 +6,8 @@ import json
 from mpi4py import MPI
 
 import logger
-from misc_utils import set_global_seeds, tf_util
+from misc_utils import set_global_seeds
+import tf_util
 from mpi_moments import mpi_moments
 import config
 from rollout import RolloutWorker
