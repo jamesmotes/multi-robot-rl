@@ -5,7 +5,7 @@ import pickle
 
 import logger
 from misc_utils import set_global_seeds
-import config as config
+import config
 from rollout import RolloutWorker
 
 

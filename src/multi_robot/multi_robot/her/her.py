@@ -8,7 +8,7 @@ from mpi4py import MPI
 import logger
 from misc_utils import set_global_seeds, tf_util
 from mpi_moments import mpi_moments
-import experiment.config as config
+import config
 from rollout import RolloutWorker
 
 def mpi_average(value):
