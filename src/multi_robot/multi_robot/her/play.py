@@ -3,10 +3,10 @@ import click
 import numpy as np
 import pickle
 
-from baselines import logger
-from baselines.common import set_global_seeds
-import baselines.her.experiment.config as config
-from baselines.her.rollout import RolloutWorker
+import logger
+from misc_utils import set_global_seeds
+import config as config
+from rollout import RolloutWorker
 
 
 @click.command()

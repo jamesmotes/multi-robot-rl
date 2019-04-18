@@ -2,10 +2,10 @@ import os
 import numpy as np
 import gym
 
-from baselines import logger
-from baselines.her.ddpg import DDPG
-from baselines.her.her_sampler import make_sample_her_transitions
-from baselines.bench.monitor import Monitor
+import logger
+from ddpg import DDPG
+from her_sampler import make_sample_her_transitions
+from monitor import Monitor
 
 DEFAULT_ENV_PARAMS = {
     'FetchReach-v1': {
