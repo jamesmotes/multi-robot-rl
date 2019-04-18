@@ -16,6 +16,8 @@ ERROR = 40
 
 DISABLED = 50
 
+SET_LEVEL = INFO
+
 class KVWriter(object):
     def writekvs(self, kvs):
         raise NotImplementedError
@@ -222,23 +224,28 @@ def getkvs():
     return get_current().name2val
 
 
-def log(*args, level=INFO):
+def log(*args):
     """
     Write the sequence of args, with no separators, to the console and output files (if you've configured an output file).
     """
-    get_current().log(*args, level=level)
+    get_current().log(*args)
+    SET_LEVEL = INFO
 
 def debug(*args):
-    log(*args, level=DEBUG)
+    SET_LEVEL = DEBUG
+    log(*args)
 
 def info(*args):
-    log(*args, level=INFO)
+    SET_LEVEL = INFO
+    log(*args)
 
 def warn(*args):
-    log(*args, level=WARN)
+    SET_LEVEL = WARN
+    log(*args)
 
 def error(*args):
-    log(*args, level=ERROR)
+    SET_LEVEL = ERROR
+    log(*args)
 
 
 def set_level(level):
@@ -335,7 +342,8 @@ class Logger(object):
         self.name2cnt.clear()
         return out
 
-    def log(self, *args, level=INFO):
+    def log(self, *args):
+        level = SET_LEVEL
         if self.level <= level:
             self._do_log(args)
 
