@@ -7,7 +7,7 @@ import math
 
 from gym import utils, spaces
 import gazebo_env
-import robot_gazebo_env_goal.py
+import robot_gazebo_env_goal
 from geometry_msgs.msg import Twist
 from std_srvs.srv import Empty
 
@@ -33,11 +33,11 @@ from gym.utils import seeding
     # More arguments here
 #)
 
-class MultiRobotEnv(robot_gazebo_env_goal.RobotGazeboEnv):
+class MultiRobotGoalEnv(robot_gazebo_env_goal.RobotGazeboEnv):
 
     def __init__(self):
         # Launch the simulation with the given launchfile name
-        gazebo_env.GazeboEnv.__init__(self, "multi_robot.launch")
+        robot_gazebo_env_goal.RobotGazeboEnv.__init__(self, "multi_robot.launch")
         self.rob1_vel_pub = rospy.Publisher('/robot1/mobile_base/commands/velocity', Twist, queue_size=5)
         self.rob2_vel_pub = rospy.Publisher('/robot2/mobile_base/commands/velocity', Twist, queue_size=5)
 

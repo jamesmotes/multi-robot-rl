@@ -32,7 +32,7 @@ def render():
 
 if __name__ == '__main__':
 
-    env = gym.make('MyMultiRobot-v0')
+    env = gym.make('MyMultiRobotGoal-v0')
 
 
     outdir = '~/multi_robot-rl/src/output'
