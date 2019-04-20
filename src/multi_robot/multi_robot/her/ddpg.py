@@ -78,7 +78,7 @@ class DDPG(object):
         for key in sorted(self.input_dims.keys()):
             if key.startswith('info_'):
                 continue
-            stage_shapes[key] = (None, *input_shapes[key])
+            stage_shapes[key] = (None,) + input_shapes[key]
         for key in ['o', 'g']:
             stage_shapes[key + '_2'] = stage_shapes[key]
         stage_shapes['r'] = (None,)
@@ -96,7 +96,7 @@ class DDPG(object):
             self._create_network(reuse=reuse)
 
         # Configure the replay buffer.
-        buffer_shapes = {key: (self.T-1 if key != 'o' else self.T, *input_shapes[key])
+        buffer_shapes = {key: (self.T-1 if key != 'o' else (self.T,) + input_shapes[key])
                          for key, val in input_shapes.items()}
         buffer_shapes['g'] = (buffer_shapes['g'][0], self.dimg)
         buffer_shapes['ag'] = (self.T, self.dimg)
