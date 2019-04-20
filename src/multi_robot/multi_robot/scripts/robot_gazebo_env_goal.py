@@ -4,7 +4,7 @@ from gym.utils import seeding
 from gazebo_connection import GazeboConnection
 from controller_connection import ControllersConnection
 #https://bitbucket.org/theconstructcore/theconstruct_msgs/src/master/msg/RLExperimentInfo.msg
-from theconstruct_msgs.msg import RLExperimentInfo
+from theconstruct_msgs.msg import *
 
 class RobotGazeboEnv(gym.GoalEnv):
 
