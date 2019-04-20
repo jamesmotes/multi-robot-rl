@@ -7,6 +7,7 @@ import math
 
 from gym import utils, spaces
 import gazebo_env
+import robot_gazebo_env_goal.py
 from geometry_msgs.msg import Twist
 from std_srvs.srv import Empty
 
@@ -32,7 +33,7 @@ from gym.utils import seeding
     # More arguments here
 #)
 
-class MultiRobotEnv(gazebo_env.GazeboEnv):
+class MultiRobotEnv(robot_gazebo_env_goal.RobotGazeboEnv):
 
     def __init__(self):
         # Launch the simulation with the given launchfile name
