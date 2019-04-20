@@ -16,9 +16,9 @@ def store_args(method):
     """
     #argspec = inspect.getfullargspec(method)
     if sys.version_info[0] == 3:
-        argspec = inspect.getfullargspec(attr)
+        argspec = inspect.getfullargspec(method)
     else:
-        argspec = inspect.getargspec(attr)  # pylint: disable=deprecated-method
+        argspec = inspect.getargspec(method)  # pylint: disable=deprecated-method
     defaults = {}
     if argspec.defaults is not None:
         defaults = dict(
