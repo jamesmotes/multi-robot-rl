@@ -14,7 +14,11 @@ import tf_util as U
 def store_args(method):
     """Stores provided method args as instance attributes.
     """
-    argspec = inspect.getfullargspec(method)
+    #argspec = inspect.getfullargspec(method)
+    if sys.version_info[0] == 3:
+        argspec = inspect.getfullargspec(attr)
+    else:
+        argspec = inspect.getargspec(attr)  # pylint: disable=deprecated-method
     defaults = {}
     if argspec.defaults is not None:
         defaults = dict(
