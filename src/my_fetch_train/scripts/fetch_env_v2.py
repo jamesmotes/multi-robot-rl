@@ -14,7 +14,6 @@ class FetchEnv(robot_gazebo_env_goal.RobotGazeboEnv):
     def __init__(self):
         print ("Entered Fetch Env")
         """Initializes a new Fetch environment.
-
         Args:
             
         """
