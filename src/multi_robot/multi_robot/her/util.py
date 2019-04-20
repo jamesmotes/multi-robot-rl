@@ -23,8 +23,8 @@ def store_args(method):
     if argspec.defaults is not None:
         defaults = dict(
             zip(argspec.args[-len(argspec.defaults):], argspec.defaults))
-    if argspec.kwonlydefaults is not None:
-        defaults.update(argspec.kwonlydefaults)
+    #if argspec.kwonlydefaults is not None:
+    #    defaults.update(argspec.kwonlydefaults)
     arg_names = argspec.args[1:]
 
     @functools.wraps(method)
