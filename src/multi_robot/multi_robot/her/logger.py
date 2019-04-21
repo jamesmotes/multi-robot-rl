@@ -379,7 +379,8 @@ def configure(dir=None, format_strs=None, comm=None):
         dir = osp.join(tempfile.gettempdir(),
             datetime.datetime.now().strftime("openai-%Y-%m-%d-%H-%M-%S-%f"))
     assert isinstance(dir, str)
-    os.makedirs(dir, exist_ok=True)
+    if !(os.access(dir, os.F_OK)):
+        os.makedirs(dir, exist_ok=True)
 
     log_suffix = ''
     rank = 0
