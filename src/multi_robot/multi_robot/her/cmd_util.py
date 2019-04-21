@@ -14,9 +14,9 @@ from baselines import logger
 from monitor import Monitor
 from misc_utils import set_global_seeds
 #from baselines.common.atari_wrappers import make_atari, wrap_deepmind
-from baselines.common.vec_env.subproc_vec_env import SubprocVecEnv
-from baselines.common.vec_env.dummy_vec_env import DummyVecEnv
-from baselines.common import retro_wrappers
+from subproc_vec_env import SubprocVecEnv
+from dummy_vec_env import DummyVecEnv
+import retro_wrappers
 
 def make_vec_env(env_id, env_type, num_env, seed,
                  wrapper_kwargs=None,

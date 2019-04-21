@@ -13,7 +13,7 @@ from vec_env import VecEnv
 from vec_video_recorder import VecVideoRecorder
 from cmd_util import common_arg_parser, parse_unknown_args, make_vec_env, make_env
 from tf_util import get_session
-from baselines import logger
+import logger
 from importlib import import_module
 
 try:
