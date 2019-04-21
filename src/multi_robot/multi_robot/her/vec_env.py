@@ -1,8 +1,11 @@
 import contextlib
 import os
-from abc import ABC, abstractmethod
+import abc
+from abc import abstractmethod
 
-from baselines.common.tile_images import tile_images
+from tile_images import tile_images
+
+ABC = abc.ABCMeta('ABC', (object,), {'__slots__': ()})
 
 class AlreadySteppingError(Exception):
     """
