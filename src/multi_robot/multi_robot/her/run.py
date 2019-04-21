@@ -116,7 +116,7 @@ def build_env(args):
 
         if env_type == 'mujoco':
             env = VecNormalize(env)
-        elif env_type == 'gazebo'
+        elif env_type == 'gazebo':
             env = VecNormalize(env)
 
     return env
