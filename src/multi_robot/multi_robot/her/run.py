@@ -15,6 +15,9 @@ from cmd_util import common_arg_parser, parse_unknown_args, make_vec_env, make_e
 from tf_util import get_session
 import logger
 from importlib import import_module
+import her
+import multi_robot
+
 
 try:
     from mpi4py import MPI
@@ -59,7 +62,7 @@ def train(args, extra_args):
     total_timesteps = int(args.num_timesteps)
     seed = args.seed
 
-    learn = get_learn_function(args.alg)
+    #learn = get_learn_function(args.alg)
     alg_kwargs = get_learn_function_defaults(args.alg, env_type)
     alg_kwargs.update(extra_args)
 
@@ -75,7 +78,7 @@ def train(args, extra_args):
 
     print('Training {} on {}:{} with arguments \n{}'.format(args.alg, env_type, env_id, alg_kwargs))
 
-    model = learn(
+    model = her.learn(
         env=env,
         seed=seed,
         total_timesteps=total_timesteps,
@@ -162,7 +165,9 @@ def get_alg_module(alg, submodule=None):
         alg_module = import_module('.'.join(['baselines', alg, submodule]))
     except ImportError:
         # then from rl_algs
-        alg_module = import_module('.'.join(['rl_' + 'algs', alg, submodule]))
+        #alg_module = import_module('.'.join(['rl_' + 'algs', alg, submodule]))
+        alg_module = import_module('.'.join([alg, submodule]))
+        
 
     return alg_module
 

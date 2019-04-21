@@ -175,7 +175,11 @@ class TensorBoardOutputFormat(KVWriter):
             self.writer = None
 
 def make_output_format(format, ev_dir, log_suffix=''):
-    os.makedirs(ev_dir, exist_ok=True)
+    if os.access(ev_dir, os.F_OK):
+        print("Directory already exists.")
+    else:
+        os.makedirs(dir)
+    #os.makedirs(ev_dir, exist_ok=True)
     if format == 'stdout':
         return HumanOutputFormat(sys.stdout)
     elif format == 'log':
@@ -379,8 +383,10 @@ def configure(dir=None, format_strs=None, comm=None):
         dir = osp.join(tempfile.gettempdir(),
             datetime.datetime.now().strftime("openai-%Y-%m-%d-%H-%M-%S-%f"))
     assert isinstance(dir, str)
-    if !(os.access(dir, os.F_OK)):
-        os.makedirs(dir, exist_ok=True)
+    if os.access(dir, os.F_OK):
+        print("Directory already exists.")
+    else:
+        os.makedirs(dir)
 
     log_suffix = ''
     rank = 0

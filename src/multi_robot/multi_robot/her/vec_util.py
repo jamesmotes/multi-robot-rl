@@ -39,10 +39,19 @@ def obs_space_info(obs_space):
         subspaces = obs_space.spaces
     else:
         subspaces = {None: obs_space}
+    print("SUBSPACES")
+    print("SUBSPACES")
+    print("SUBSPACES")
+    print(subspaces)
+    print("POST SUBSPACES")
+    print("POST SUBSPACES")
+    print("POST SUBSPACES")
     keys = []
     shapes = {}
     dtypes = {}
     for key, box in subspaces.items():
+        if key == None:
+            continue
         keys.append(key)
         shapes[key] = box.shape
         dtypes[key] = box.dtype

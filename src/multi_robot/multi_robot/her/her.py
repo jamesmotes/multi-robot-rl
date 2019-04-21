@@ -109,7 +109,7 @@ def learn(network, env, total_timesteps,
 
     # Prepare params.
     params = config.DEFAULT_PARAMS
-    env_name = env.spec.id
+    env_name = "MyMultiRobot-v0"#env.spec.id
     params['env_name'] = env_name
     params['replay_strategy'] = replay_strategy
     if env_name in config.DEFAULT_ENV_PARAMS:
