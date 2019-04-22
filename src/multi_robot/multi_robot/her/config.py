@@ -183,8 +183,8 @@ def configure_ddpg(dims, params, reuse=False, use_mpi=True, clip_return=True):
     return policy
 
 
-def configure_dims(params):
-    env = cached_make_env(params['make_env'])
+def configure_dims(params,env):
+    #env = cached_make_env(params['make_env'])
     env.reset()
     obs, _, _, info = env.step(env.action_space.sample())
 
