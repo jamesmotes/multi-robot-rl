@@ -123,7 +123,7 @@ def learn(network, env, total_timesteps,
     with open(os.path.join(logger.get_dir(), 'params.json'), 'w') as f:
          json.dump(params, f)
     params = config.prepare_params(params)
-    params['rollout_batch_size'] = env.num_envs
+    params['rollout_batch_size'] = 1#env.num_envs
 
     if demo_file is not None:
         params['bc_loss'] = 1

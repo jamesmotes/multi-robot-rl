@@ -94,8 +94,8 @@ def prepare_params(kwargs):
             env = gym.wrappers.TimeLimit(env, max_episode_steps=max_episode_steps)
         return env
 
-    kwargs['make_env'] = make_env
-    tmp_env = cached_make_env(kwargs['make_env'])
+    #kwargs['make_env'] = make_env
+    #tmp_env = cached_make_env(kwargs['make_env'])
     #assert hasattr(tmp_env, '_max_episode_steps')
     kwargs['T'] = 500 #tmp_env._max_episode_steps
 
