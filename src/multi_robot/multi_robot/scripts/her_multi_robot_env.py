@@ -305,7 +305,7 @@ class HERMultiRobotEnv(gazebo_env.GazeboEnv,utils.EzPickle):
 
         state = self.discretize_observation(data,5)
 
-        return state
+        return _get_obs()
 
     def _env_setup(self):#, initial_qpos):
         self.goal = self._sample_goal()
@@ -343,11 +343,12 @@ class HERMultiRobotEnv(gazebo_env.GazeboEnv,utils.EzPickle):
 
 
         achieved_goal = self._sample_achieved_goal(state)
-        return {
+        dictionary = {
             'observation': obs.copy(),
             'achieved_goal': achieved_goal.copy(),
             'desired_goal': self.goal.copy(),
         }
+        return dictionary
 
     def _sample_goal(self):
         relative_distance = np.array([1])
