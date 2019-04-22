@@ -51,8 +51,9 @@ class DummyVecEnv(VecEnv):
             if self.buf_dones[e]:
                 obs = self.envs[e].reset()
             self._save_obs(e, obs)
+        buf_infos = self.buf_infos
         return (self._obs_from_buf(), np.copy(self.buf_rews), np.copy(self.buf_dones),
-                self.buf_infos.copy())
+                buf_infos)
 
     def reset(self):
         for e in range(self.num_envs):
@@ -67,7 +68,9 @@ class DummyVecEnv(VecEnv):
             if k is None:
                 self.buf_obs[k][e] = obs
             else:
-                print(self.buf_obs[k])
+                print("K")
+                print(k)
+                print("OBS")
                 print(obs)
                 self.buf_obs[k][e] = obs[k]
 

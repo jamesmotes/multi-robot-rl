@@ -124,8 +124,8 @@ def log_params(params, logger=logger):
         logger.info('{}: {}'.format(key, params[key]))
 
 
-def configure_her(params):
-    env = cached_make_env(params['make_env'])
+def configure_her(params, env):
+    #env = cached_make_env(params['make_env'])
     env.reset()
 
     def reward_fun(ag_2, g, info):  # vectorized
@@ -149,8 +149,8 @@ def simple_goal_subtract(a, b):
     return a - b
 
 
-def configure_ddpg(dims, params, reuse=False, use_mpi=True, clip_return=True):
-    sample_her_transitions = configure_her(params)
+def configure_ddpg(dims, params, env, reuse=False, use_mpi=True, clip_return=True):
+    sample_her_transitions = configure_her(params, env)
     # Extract relevant parameters.
     gamma = params['gamma']
     rollout_batch_size = params['rollout_batch_size']
@@ -159,7 +159,7 @@ def configure_ddpg(dims, params, reuse=False, use_mpi=True, clip_return=True):
     input_dims = dims.copy()
 
     # DDPG agent
-    env = cached_make_env(params['make_env'])
+    #env = cached_make_env(params['make_env'])
     env.reset()
     ddpg_params.update({'input_dims': input_dims,  # agent takes an input observations
                         'T': params['T'],
@@ -193,9 +193,12 @@ def configure_dims(params,env):
         'u': env.action_space.shape[0],
         'g': obs['desired_goal'].shape[0],
     }
-    for key, value in info.items():
-        value = np.array(value)
-        if value.ndim == 0:
-            value = value.reshape(1)
-        dims['info_{}'.format(key)] = value.shape[0]
+    try:
+        for key, value in info.items():
+            value = np.array(value)
+            if value.ndim == 0:
+                value = value.reshape(1)
+            dims['info_{}'.format(key)] = value.shape[0]
+    except:
+        pass
     return dims
