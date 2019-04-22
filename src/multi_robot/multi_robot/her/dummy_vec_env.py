@@ -61,10 +61,14 @@ class DummyVecEnv(VecEnv):
         return self._obs_from_buf()
 
     def _save_obs(self, e, obs):
+        print(e)
+        print(self.keys)
         for k in self.keys:
             if k is None:
                 self.buf_obs[k][e] = obs
             else:
+                print(self.buf_obs[k])
+                print(obs)
                 self.buf_obs[k][e] = obs[k]
 
     def _obs_from_buf(self):

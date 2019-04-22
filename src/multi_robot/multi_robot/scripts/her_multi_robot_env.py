@@ -305,7 +305,7 @@ class HERMultiRobotEnv(gazebo_env.GazeboEnv,utils.EzPickle):
 
         state = self.discretize_observation(data,5)
 
-        return _get_obs()
+        return self._get_obs()
 
     def _env_setup(self):#, initial_qpos):
         self.goal = self._sample_goal()
