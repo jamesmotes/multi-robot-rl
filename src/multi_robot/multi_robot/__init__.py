@@ -11,3 +11,8 @@ register(
     entry_point='multi_robot.scripts.multi_robot_env:MultiRobotEnv',
     # More arguments here
 )
+register(
+    id='HERMultiRobot-v0',
+    entry_point='multi_robot.scripts.her_multi_robot_env:HERMultiRobotEnv',
+    # More arguments here
+)
