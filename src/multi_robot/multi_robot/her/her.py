@@ -25,6 +25,11 @@ def train(policy, rollout_worker, evaluator,
           save_path, demo_file, **kwargs):
     rank = MPI.COMM_WORLD.Get_rank()
 
+    print("STARTING TRAINING")
+    print("STARTING TRAINING")
+    print("STARTING TRAINING")
+    print("STARTING TRAINING")
+
     if save_path:
         latest_policy_path = os.path.join(save_path, 'policy_latest.pkl')
         best_policy_path = os.path.join(save_path, 'policy_best.pkl')
@@ -109,7 +114,7 @@ def learn(network, env, total_timesteps,
 
     # Prepare params.
     params = config.DEFAULT_PARAMS
-    env_name = "MyMultiRobot-v0"#env.spec.id
+    env_name = "HERMultiRobot-v0"#env.spec.id
     params['env_name'] = env_name
     params['replay_strategy'] = replay_strategy
     if env_name in config.DEFAULT_ENV_PARAMS:
@@ -138,8 +143,13 @@ def learn(network, env, total_timesteps,
         logger.warn('****************')
         logger.warn()
 
+    print("GOT PAST WARNING")
+    print("GOT PAST WARNING")
+    print("GOT PAST WARNING")
+
     dims = config.configure_dims(params)
     policy = config.configure_ddpg(dims=dims, params=params, clip_return=clip_return)
+    print("CONFIGURED POLICY")
     if load_path is not None:
         tf_util.load_variables(load_path)
 
@@ -166,7 +176,9 @@ def learn(network, env, total_timesteps,
     eval_env = eval_env or env
 
     rollout_worker = RolloutWorker(env, policy, dims, logger, monitor=True, **rollout_params)
+    print("INITIALIZED ROLLOUT WORKER")
     evaluator = RolloutWorker(eval_env, policy, dims, logger, **eval_params)
+    print("INITIALIZED EVALUATOR")
 
     n_cycles = params['n_cycles']
     n_epochs = total_timesteps // n_cycles // rollout_worker.T // rollout_worker.rollout_batch_size
