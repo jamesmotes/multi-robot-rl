@@ -32,7 +32,7 @@ from gym.utils import seeding
     # More arguments here
 #)
 
-class HERMultiRobotEnv(gazebo_env.GazeboEnv):
+class HERMultiRobotEnv(gazebo_env.GazeboEnv,utils.EzPickle):
 
     def __init__(self):
         # Launch the simulation with the given launchfile name
@@ -308,7 +308,7 @@ class HERMultiRobotEnv(gazebo_env.GazeboEnv):
         return state
 
     def _env_setup(self):#, initial_qpos):
-        self.goal = _sample_goal()
+        self.goal = self._sample_goal()
         self.reset()
         self._get_obs()
 
@@ -338,8 +338,8 @@ class HERMultiRobotEnv(gazebo_env.GazeboEnv):
             except:
                 pass
 
-        state = configure_state(results1, results2)
-        obs = np.concatenate(state)
+        state = self.configure_state(results1, results2)
+        obs = np.array(state)
 
 
         achieved_goal = self._sample_achieved_goal(state)
@@ -350,7 +350,8 @@ class HERMultiRobotEnv(gazebo_env.GazeboEnv):
         }
 
     def _sample_goal(self):
-        relative_distance = np.array[1]
+        relative_distance = np.array([1])
+        return relative_distance
 
     def _sample_achieved_goal(self, state):
         x_diff = (state[0] - state[7])**2
