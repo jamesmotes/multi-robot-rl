@@ -20,8 +20,18 @@ class ReplayBuffer:
         self.sample_transitions = sample_transitions
 
         # self.buffers is {key: array(size_in_episodes x T or T+1 x dim_key)}
-        self.buffers = {key: np.empty([(self.size,) + shape])
-                        for key, shape in buffer_shapes.items()}
+        print(self.buffer_shapes)
+        print(self.size)
+        #self.buffers = {key: np.empty([(self.size,) + shape])
+        #                for key, shape in buffer_shapes.items()}
+
+        self.buffers = {}
+        for key, shape in buffer_shapes.items():
+            if key == 'u':
+                tup = (self.size,) + (shape,)
+            else:
+                tup = (self.size,) + shape
+            self.buffers[key] = tup
 
         # memory management
         self.current_size = 0

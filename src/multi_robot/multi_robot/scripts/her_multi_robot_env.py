@@ -172,6 +172,9 @@ class HERMultiRobotEnv(gazebo_env.GazeboEnv,utils.EzPickle):
 
     def step(self, action):
 
+        print("ACTION")
+        print(action)
+
         self.steps += 1
 
         rospy.wait_for_service('/gazebo/unpause_physics')

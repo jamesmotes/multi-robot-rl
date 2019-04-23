@@ -36,6 +36,7 @@ def train(policy, rollout_worker, evaluator,
         periodic_policy_path = os.path.join(save_path, 'policy_{}.pkl')
 
     logger.info("Training...")
+    print(n_epochs)
     best_success_rate = -1
 
     if policy.bc_loss == 1: policy.init_demo_buffer(demo_file) #initialize demo buffer if training with demonstrations
@@ -182,6 +183,13 @@ def learn(network, env, total_timesteps,
 
     n_cycles = params['n_cycles']
     n_epochs = total_timesteps // n_cycles // rollout_worker.T // rollout_worker.rollout_batch_size
+
+
+    print("EPOCH PARAMS")
+    print(total_timesteps)
+    print(n_cycles)
+    print(rollout_worker.T)
+    print(rollout_worker.rollout_batch_size)
 
     return train(
         save_path=save_path, policy=policy, rollout_worker=rollout_worker,
