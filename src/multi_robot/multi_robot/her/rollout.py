@@ -60,7 +60,7 @@ class RolloutWorker:
 
         # compute observations
         #o = np.empty((self.rollout_batch_size, self.dims['o']), np.float32)  # observations
-        o = np.empty((self.rollout_batch_size, 14), np.float32)  # observations
+        o = np.empty((self.rollout_batch_size, self.dims['o']), np.float32)  # observations
         ag = np.empty((self.rollout_batch_size, self.dims['g']), np.float32)  # achieved goals
         print(o)
         print(self.initial_o)
