@@ -56,12 +56,13 @@ class HERMultiRobotEnv(gazebo_env.GazeboEnv,utils.EzPickle):
 
         utils.EzPickle.__init__(self)
 
-        self.n_actions = 1
+        self.n_actions = 2
+        self.n_robots = 2
         self._env_setup()
         obs = self._get_obs()
 
         #self.action_space = spaces.Box(-1., 1., shape=(self.n_actions,), dtype='float32')
-        self.action_space = spaces.Box(0, 8, shape=(self.n_actions,), dtype='int')
+        self.action_space = spaces.Box(-.3, .3, shape=(self.n_actions,n_robots), dtype='floa32')
         self.observation_space = spaces.Dict(dict(
             desired_goal=spaces.Box(-np.inf, np.inf, shape=obs['achieved_goal'].shape, dtype='float32'),
             achieved_goal=spaces.Box(-np.inf, np.inf, shape=obs['achieved_goal'].shape, dtype='float32'),
@@ -146,21 +147,23 @@ class HERMultiRobotEnv(gazebo_env.GazeboEnv,utils.EzPickle):
 
     def move_robot(self, robot, action):
         vel_cmd = Twist()
-        if action == 0: #STATIONARY
-            vel_cmd.linear.x = 0.0
-            vel_cmd.angular.z = 0.0
-        elif action == 1: #FORWARD 
-            vel_cmd = Twist()
-            vel_cmd.linear.x = 0.3
-            vel_cmd.angular.z = 0.0
-        elif action == 2: #LEFT 
-            vel_cmd = Twist()
-            vel_cmd.linear.x = 0.1
-            vel_cmd.angular.z = 0.3
-        elif action == 3: #RIGHT
-            vel_cmd = Twist()
-            vel_cmd.linear.x = 0.1
-            vel_cmd.angular.z = -0.3
+        # if action == 0: #STATIONARY
+        #     vel_cmd.linear.x = 0.0
+        #     vel_cmd.angular.z = 0.0
+        # elif action == 1: #FORWARD 
+        #     vel_cmd = Twist()
+        #     vel_cmd.linear.x = 0.3
+        #     vel_cmd.angular.z = 0.0
+        # elif action == 2: #LEFT 
+        #     vel_cmd = Twist()
+        #     vel_cmd.linear.x = 0.1
+        #     vel_cmd.angular.z = 0.3
+        # elif action == 3: #RIGHT
+        #     vel_cmd = Twist()
+        #     vel_cmd.linear.x = 0.1
+        #     vel_cmd.angular.z = -0.3
+        vel_cmd.linear.x = action[robot-1][0]
+        vel_cmd.angular.z = action[robot-1][1]
         self.publishers[robot-1].publish(vel_cmd)
         #print("moving robot")
         #print(robot-1)
@@ -184,41 +187,45 @@ class HERMultiRobotEnv(gazebo_env.GazeboEnv,utils.EzPickle):
             print ("/gazebo/unpause_physics service call failed")
 
             
-        if action == 0: #1-FORWARD 2-FORWARD
-            self.move_robot(1,1)
-            self.move_robot(2,1)
+        # if action == 0: #1-FORWARD 2-FORWARD
+        #     self.move_robot(1,1)
+        #     self.move_robot(2,1)
             
-        elif action == 1: #1-LEFT 2-FORWARD
-            self.move_robot(1,2)
-            self.move_robot(2,1)
+        # elif action == 1: #1-LEFT 2-FORWARD
+        #     self.move_robot(1,2)
+        #     self.move_robot(2,1)
            
-        elif action == 2: #1-RIGHT 2-FORWARD
-            self.move_robot(1,3)
-            self.move_robot(2,1)
+        # elif action == 2: #1-RIGHT 2-FORWARD
+        #     self.move_robot(1,3)
+        #     self.move_robot(2,1)
             
-        elif action == 3: #1-FORWARD 2-LEFT
-            self.move_robot(1,1)
-            self.move_robot(2,2)
+        # elif action == 3: #1-FORWARD 2-LEFT
+        #     self.move_robot(1,1)
+        #     self.move_robot(2,2)
             
-        elif action == 4: #1-LEFT 2-LEFT
-            self.move_robot(1,2)
-            self.move_robot(2,2)
+        # elif action == 4: #1-LEFT 2-LEFT
+        #     self.move_robot(1,2)
+        #     self.move_robot(2,2)
            
-        elif action == 5: #1-RIGHT 2-LEFT
-            self.move_robot(1,3)
-            self.move_robot(2,2)
+        # elif action == 5: #1-RIGHT 2-LEFT
+        #     self.move_robot(1,3)
+        #     self.move_robot(2,2)
             
-        elif action == 6: #1-FORWARD 2-RIGHT
-            self.move_robot(1,1)
-            self.move_robot(2,3)
+        # elif action == 6: #1-FORWARD 2-RIGHT
+        #     self.move_robot(1,1)
+        #     self.move_robot(2,3)
             
-        elif action == 7: #1-LEFT 2-RIGHT
-            self.move_robot(1,2)
-            self.move_robot(2,3)
+        # elif action == 7: #1-LEFT 2-RIGHT
+        #     self.move_robot(1,2)
+        #     self.move_robot(2,3)
            
-        elif action == 8: #1-RIGHT 2-RIGHT
-            self.move_robot(1,3)
-            self.move_robot(2,3)
+        # elif action == 8: #1-RIGHT 2-RIGHT
+        #     self.move_robot(1,3)
+        #     self.move_robot(2,3)
+
+        #later turn this into a for loop for self.n_robots
+        self.move_robot(1,action)
+        self.move_robot(2,action)
 
 
         model1 = GetModelStateRequest()
@@ -350,7 +357,7 @@ class HERMultiRobotEnv(gazebo_env.GazeboEnv,utils.EzPickle):
 
         achieved_goal = self._sample_achieved_goal(state)
         dictionary = {
-            'observation': obs.copy(),
+            'observation': achieved_goal.copy(),
             'achieved_goal': achieved_goal.copy(),
             'desired_goal': self.goal.copy(),
         }
@@ -358,17 +365,24 @@ class HERMultiRobotEnv(gazebo_env.GazeboEnv,utils.EzPickle):
         return dictionary
 
     def _sample_goal(self):
-        relative_distance = np.array([1])
-        return relative_distance
+        relative_positions = np.array([.25, 0.], [.25, 0.])
+        return relative_positions
 
     def _sample_achieved_goal(self, state):
-        x_diff = (state[0] - state[7])**2
-        y_diff = (state[1] - state[8])**2
-        z_diff = (state[2] - state[9])**2
+        x_diff = (state[0] - state[7])
+        y_diff = (state[1] - state[8])
+        z_diff = (state[2] - state[9])
 
         relative_distance = math.sqrt(x_diff**2 + y_diff**2 + z_diff**2)
-        relative_distance = np.array([relative_distance])
-        return relative_distance
+
+        angle1 = -1 * math.tan((-1*y_diff)/(-1*x_diff))
+        angle1 = angle1 + math.tan(state[1]/state[0])
+
+        angle2 = -1 * math.tan(y_diff/x_diff)
+        angle2 = angle2 * math.tan(state[8]/state[9])
+
+        relative_positions = np.array([relative_distance, angle1], [relative_distance, angle2])
+        return relative_positions
 
     def _is_done(self, observations):
         d = self.goal_distance(observations['achieved_goal'], self.goal)
