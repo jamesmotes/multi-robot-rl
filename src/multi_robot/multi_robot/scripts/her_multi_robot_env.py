@@ -62,9 +62,9 @@ class HERMultiRobotEnv(gazebo_env.GazeboEnv,utils.EzPickle):
         obs = self._get_obs()
 
         #self.action_space = spaces.Box(-1., 1., shape=(self.n_actions,), dtype='float32')
-        self.action_space = spaces.Box(-.3, .3, shape=(self.n_actions,n_robots), dtype='floa32')
+        self.action_space = spaces.Box(-.3, .3, shape=(self.n_actions,self.n_robots), dtype='float32')
         self.observation_space = spaces.Dict(dict(
-            desired_goal=spaces.Box(-np.inf, np.inf, shape=obs['achieved_goal'].shape, dtype='float32'),
+            desired_goal=spaces.Box(-np.inf, np.inf, shape=obs['desired_goal'].shape, dtype='float32'),
             achieved_goal=spaces.Box(-np.inf, np.inf, shape=obs['achieved_goal'].shape, dtype='float32'),
             observation=spaces.Box(-np.inf, np.inf, shape=obs['observation'].shape, dtype='float32'),
         ))
@@ -365,7 +365,7 @@ class HERMultiRobotEnv(gazebo_env.GazeboEnv,utils.EzPickle):
         return dictionary
 
     def _sample_goal(self):
-        relative_positions = np.array([.25, 0.], [.25, 0.])
+        relative_positions = np.array([[.25, 0.], [.25, 0.]], np.float32)
         return relative_positions
 
     def _sample_achieved_goal(self, state):
@@ -381,7 +381,7 @@ class HERMultiRobotEnv(gazebo_env.GazeboEnv,utils.EzPickle):
         angle2 = -1 * math.tan(y_diff/x_diff)
         angle2 = angle2 * math.tan(state[8]/state[9])
 
-        relative_positions = np.array([relative_distance, angle1], [relative_distance, angle2])
+        relative_positions = np.array([[relative_distance, angle1], [relative_distance, angle2]], np.float32)
         return relative_positions
 
     def _is_done(self, observations):

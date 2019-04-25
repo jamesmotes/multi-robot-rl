@@ -1,2 +1,2 @@
-multi_robot
+fetch_train:multi_robot:my_fetch_train
 -DCATKIN_DEVEL_PREFIX=/home/james/multi_robot_ws/devel -DCMAKE_INSTALL_PREFIX=/home/james/multi_robot_ws/install -G Unix Makefiles

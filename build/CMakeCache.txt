@@ -296,6 +296,12 @@ cpp_common_DIR:PATH=/opt/ros/melodic/share/cpp_common/cmake
 //The directory containing a CMake configuration file for dynamic_reconfigure.
 dynamic_reconfigure_DIR:PATH=/opt/ros/melodic/share/dynamic_reconfigure/cmake
 
+//Value Computed by CMake
+fetch_train_BINARY_DIR:STATIC=/home/james/multi_robot_ws/build/fetch_train
+
+//Value Computed by CMake
+fetch_train_SOURCE_DIR:STATIC=/home/james/multi_robot_ws/src/fetch_train
+
 //The directory containing a CMake configuration file for gazebo_msgs.
 gazebo_msgs_DIR:PATH=/home/james/gym-gazebo/gym_gazebo/envs/installation/catkin_ws/devel/share/gazebo_msgs/cmake
 
@@ -389,6 +395,12 @@ multi_robot_BINARY_DIR:STATIC=/home/james/multi_robot_ws/build/multi_robot
 
 //Value Computed by CMake
 multi_robot_SOURCE_DIR:STATIC=/home/james/multi_robot_ws/src/multi_robot
+
+//Value Computed by CMake
+my_fetch_train_BINARY_DIR:STATIC=/home/james/multi_robot_ws/build/my_fetch_train
+
+//Value Computed by CMake
+my_fetch_train_SOURCE_DIR:STATIC=/home/james/multi_robot_ws/src/my_fetch_train
 
 //The directory containing a CMake configuration file for rosconsole.
 rosconsole_DIR:PATH=/opt/ros/melodic/share/rosconsole/cmake
@@ -560,7 +572,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=5
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=7
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

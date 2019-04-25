@@ -1,0 +1,8 @@
+prefix=/home/james/multi_robot_ws/install
+
+Name: theconstruct_msgs
+Description: Description of theconstruct_msgs
+Version: 0.0.0
+Cflags: -I/home/james/multi_robot_ws/install/include
+Libs: -L/home/james/multi_robot_ws/install/lib 
+Requires: message_runtime
