@@ -59,6 +59,8 @@ class Monitor(Wrapper):
 
     def update(self, ob, rew, done, info):
         self.rewards.append(rew)
+        print("DONE")
+        print(done)
         if done:
             self.needs_reset = True
             eprew = sum(self.rewards)

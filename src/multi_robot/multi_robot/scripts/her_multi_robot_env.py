@@ -386,7 +386,7 @@ class HERMultiRobotEnv(gazebo_env.GazeboEnv,utils.EzPickle):
 
     def _is_done(self, observations):
         d = self.goal_distance(observations['achieved_goal'], self.goal)
-        
+        d = d[0] + d[1] 
         return (d <= 1).astype(np.float32)
 
     def _compute_reward(self, observations, done):
@@ -395,6 +395,7 @@ class HERMultiRobotEnv(gazebo_env.GazeboEnv,utils.EzPickle):
         #if self.reward_type == 'sparse':
         #    return -(d > self.distance_threshold).astype(np.float32)
         #else:
+        d = d[0] + d[1]
         return -d
 
     def goal_distance(self, goal_a, goal_b):

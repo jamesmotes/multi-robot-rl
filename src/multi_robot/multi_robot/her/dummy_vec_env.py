@@ -47,7 +47,13 @@ class DummyVecEnv(VecEnv):
             # if isinstance(self.envs[e].action_space, spaces.Discrete):
             #    action = int(action)
 
+            #stepResults = self.envs[e].step(action)
+            #print(stepResults)
             obs, self.buf_rews[e], self.buf_dones[e], self.buf_infos[e] = self.envs[e].step(action)
+            #obs, _, _, _ = stepResults # = self.envs[e].step(action)
+            #_, self.buf_rews[e], _, _ = stepResults # = self.envs[e].step(action)
+            #_,_, self.buf_dones[e], _ = stepResults # = self.envs[e].step(action)
+            #_, _, _, self.buf_infos[e] = stepResults # = self.envs[e].step(action)
             if self.buf_dones[e]:
                 obs = self.envs[e].reset()
             self._save_obs(e, obs)
