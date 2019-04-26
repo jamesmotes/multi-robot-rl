@@ -41,3 +41,10 @@ class VecNormalize(VecEnvWrapper):
         self.ret = np.zeros(self.num_envs)
         obs = self.venv.reset()
         return self._obfilt(obs)
+
+    def compute_reward(self, achieved_goal, desired_goal, info):
+        #d = self.goal_distance(achieved_goal, desired_goal)
+        assert achieved_goal.shape == desired_goal.shape
+        d = np.linalg.norm(achieved_goal - desired_goal, axis=-1)
+        d = d[0] + d[1]
+        return (-1 * d)
