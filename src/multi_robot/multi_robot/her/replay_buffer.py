@@ -76,7 +76,11 @@ class ReplayBuffer:
 
             # load inputs into buffers
             for key in self.buffers.keys():
-                self.buffers[key][idxs] = episode_batch[key]
+                #self.buffers[key][idxs] = episode_batch[key]
+                l = list(self.buffers[key])
+                l[idxs] = episode_batch[key]
+                t = tuple(l)
+                self.buffers[key] = t
 
             self.n_transitions_stored += batch_size * self.T
 

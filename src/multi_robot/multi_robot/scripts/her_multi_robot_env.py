@@ -169,13 +169,14 @@ class HERMultiRobotEnv(gazebo_env.GazeboEnv,utils.EzPickle):
         #print(robot-1)
 
     def _set_action(self, action):
-        assert action.shape == (1,)
+        assert action.shape == (2,2)
         action = action.copy()
         self.step(action)
 
     def step(self, action):
 
         print("ACTION")
+        action = action.reshape((2,2))
         print(action)
 
         self.steps += 1

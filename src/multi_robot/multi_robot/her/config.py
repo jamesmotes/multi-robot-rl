@@ -187,12 +187,21 @@ def configure_dims(params,env):
     #env = cached_make_env(params['make_env'])
     env.reset()
     obs, _, _, info = env.step(env.action_space.sample())
-
+    print("CONFIG DIMS")
+    print("CONFIG DIMS")
+    print("CONFIG DIMS")
+    print("CONFIG DIMS")
+    print("CONFIG DIMS")
+    print(obs)
+    print("OBS SHAPE")
+    print(obs['observation'].shape)
     dims = {
-        'o': obs['observation'].shape[0],
-        'u': env.action_space.shape[0],
-        'g': obs['desired_goal'].shape[0],
+        'o': 4,#obs['observation'].shape[0] + obs['observation'].shape[1],
+        'u': 4,#env.action_space.shape[0] + env.action_space.shape[1],
+        'g': 4,#obs['desired_goal'].shape[0] + obs['desired_goal'].shape[0],
     }
+    print(dims)
+    print("FINSIHED PRINTING DIMS")
     try:
         for key, value in info.items():
             value = np.array(value)
