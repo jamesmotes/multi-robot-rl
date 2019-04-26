@@ -53,9 +53,12 @@ class ReplayBuffer:
             assert self.current_size > 0
             for key in self.buffers.keys():
                 buffers[key] = self.buffers[key][:self.current_size]
-
-        buffers['o_2'] = buffers['o'][:, 1:, :]
-        buffers['ag_2'] = buffers['ag'][:, 1:, :]
+        print("PRINTING BUFFERS")
+        print(buffers['o'])
+        print("PRINTING BUFFERS 2")
+        print(buffers['ag'])
+        buffers['o_2'] = buffers['o'][0][:, 1:, :]
+        buffers['ag_2'] = buffers['ag'][0][:, 1:, :]
 
         transitions = self.sample_transitions(buffers, batch_size)
 

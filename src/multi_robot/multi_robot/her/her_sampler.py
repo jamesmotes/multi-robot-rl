@@ -19,14 +19,22 @@ def make_sample_her_transitions(replay_strategy, replay_k, reward_fun):
     def _sample_her_transitions(episode_batch, batch_size_in_transitions):
         """episode_batch is {key: array(buffer_size x T x dim_key)}
         """
-        T = episode_batch['u'].shape[1]
-        rollout_batch_size = episode_batch['u'].shape[0]
+        print("EPISODE BATCH U")
+        print(episode_batch['u'][0].shape)
+        print(episode_batch.keys())
+        T = episode_batch['u'][0].shape[1]
+        rollout_batch_size = episode_batch['u'][0].shape[0]
         batch_size = batch_size_in_transitions
 
         # Select which episodes and time steps to use.
         episode_idxs = np.random.randint(0, rollout_batch_size, batch_size)
         t_samples = np.random.randint(T, size=batch_size)
-        transitions = {key: episode_batch[key][episode_idxs, t_samples].copy()
+        print(episode_idxs)
+        print(rollout_batch_size)
+        print(batch_size)
+        print(t_samples)
+        print(T)
+        transitions = {key: episode_batch[key][0][episode_idxs, t_samples].copy()
                        for key in episode_batch.keys()}
 
         # Select future time indexes proportional with probability future_p. These
@@ -53,8 +61,14 @@ def make_sample_her_transitions(replay_strategy, replay_k, reward_fun):
         reward_params['info'] = info
         transitions['r'] = reward_fun(**reward_params)
 
-        transitions = {k: transitions[k].reshape(batch_size, *transitions[k].shape[1:])
-                       for k in transitions.keys()}
+        #print("BATCH SIZE")
+        #print(batch_size)
+        #print("TRANSITIONS")
+        #print(transitions['g'].shape)
+        #print(transitions['ag_2'].shape)
+        #print(transitions['u'].shape)
+        #transitions = {k: transitions[k].reshape(batch_size, *transitions[k].shape[1:])
+                       #for k in transitions.keys()}
 
         assert(transitions['u'].shape[0] == batch_size_in_transitions)
 
