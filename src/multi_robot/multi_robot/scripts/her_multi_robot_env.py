@@ -397,7 +397,11 @@ class HERMultiRobotEnv(gazebo_env.GazeboEnv,utils.EzPickle):
         #    return -(d > self.distance_threshold).astype(np.float32)
         #else:
         d = d[0] + d[1]
-        return -d
+        return (-1 * d)
+    def compute_reward(self, achieved_goal, desired_goal, info):
+        d = self.goal_distance(achieved_goal, desired_goal)
+        d = d[0] + d[1]
+        return (-1 * d)
 
     def goal_distance(self, goal_a, goal_b):
         assert goal_a.shape == goal_b.shape
