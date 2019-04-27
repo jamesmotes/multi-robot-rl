@@ -62,7 +62,7 @@ class HERMultiRobotEnv(gazebo_env.GazeboEnv,utils.EzPickle):
         obs = self._get_obs()
 
         #self.action_space = spaces.Box(-1., 1., shape=(self.n_actions,), dtype='float32')
-        self.action_space = spaces.Box(-.3, .3, shape=(self.n_actions,self.n_robots), dtype='float32')
+        self.action_space = spaces.Box(-.3, .3, shape=(4,), dtype='float32')
         self.observation_space = spaces.Dict(dict(
             desired_goal=spaces.Box(-np.inf, np.inf, shape=obs['desired_goal'].shape, dtype='float32'),
             achieved_goal=spaces.Box(-np.inf, np.inf, shape=obs['achieved_goal'].shape, dtype='float32'),
@@ -366,7 +366,7 @@ class HERMultiRobotEnv(gazebo_env.GazeboEnv,utils.EzPickle):
         return dictionary
 
     def _sample_goal(self):
-        relative_positions = np.array([[.25, 0.], [.25, 0.]], np.float32)
+        relative_positions = np.array([[.25, 0., .25, 0.]], np.float32)
         return relative_positions
 
     def _sample_achieved_goal(self, state):
@@ -382,12 +382,12 @@ class HERMultiRobotEnv(gazebo_env.GazeboEnv,utils.EzPickle):
         angle2 = -1 * math.tan(y_diff/x_diff)
         angle2 = angle2 * math.tan(state[8]/state[9])
 
-        relative_positions = np.array([[relative_distance, angle1], [relative_distance, angle2]], np.float32)
+        relative_positions = np.array([[relative_distance, angle1, relative_distance, angle2]], np.float32)
         return relative_positions
 
     def _is_done(self, observations):
         d = self.goal_distance(observations['achieved_goal'], self.goal)
-        d = d[0] + d[1] 
+        d = d[0]# + d[1] 
         return (d <= 1).astype(np.float32)
 
     def _compute_reward(self, observations, done):
@@ -396,11 +396,11 @@ class HERMultiRobotEnv(gazebo_env.GazeboEnv,utils.EzPickle):
         #if self.reward_type == 'sparse':
         #    return -(d > self.distance_threshold).astype(np.float32)
         #else:
-        d = d[0] + d[1]
+        d = d[0]# + d[1]
         return (-1 * d)
     def compute_reward(self, achieved_goal, desired_goal, info):
         d = self.goal_distance(achieved_goal, desired_goal)
-        d = d[0] + d[1]
+        d = d[0]# + d[1]
         return (-1 * d)
 
     def goal_distance(self, goal_a, goal_b):

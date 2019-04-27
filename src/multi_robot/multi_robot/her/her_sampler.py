@@ -20,6 +20,11 @@ def make_sample_her_transitions(replay_strategy, replay_k, reward_fun):
         """episode_batch is {key: array(buffer_size x T x dim_key)}
         """
         print("EPISODE BATCH U")
+        print(episode_batch['ag'][0].shape)
+        print(episode_batch['g'][0].shape)
+        print(episode_batch['o_2'][0].shape)
+        print(episode_batch['o'][0].shape)
+        print(episode_batch['ag_2'][0].shape)
         print(episode_batch['u'][0].shape)
         print(episode_batch.keys())
         T = episode_batch['u'][0].shape[1]
