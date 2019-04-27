@@ -27,6 +27,14 @@ def make_sample_her_transitions(replay_strategy, replay_k, reward_fun):
         print(episode_batch['ag_2'][0].shape)
         print(episode_batch['u'][0].shape)
         print(episode_batch.keys())
+
+        episode_batch['ag'][0] = np.squeeze(episode_batch['ag'][0])
+        episode_batch['g'][0] = np.squeeze(episode_batch['g'][0])
+        episode_batch['o_2'][0] = np.squeeze(episode_batch['o_2'][0])
+        episode_batch['o'][0] = np.squeeze(episode_batch['o'][0])
+        episode_batch['ag_2'][0] = np.squeeze(episode_batch['ag_2'][0])
+        episode_batch['u'][0] = np.squeeze(episode_batch['u'][0])
+
         T = episode_batch['u'][0].shape[1]
         rollout_batch_size = episode_batch['u'][0].shape[0]
         batch_size = batch_size_in_transitions
