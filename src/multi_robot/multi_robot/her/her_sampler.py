@@ -47,12 +47,17 @@ def make_sample_her_transitions(replay_strategy, replay_k, reward_fun):
         her_indexes = np.where(np.random.uniform(size=batch_size) < future_p)
         future_offset = np.random.uniform(size=batch_size) * (T - t_samples)
         future_offset = future_offset.astype(int)
-        future_t = (t_samples + 1 + future_offset)[her_indexes]
+        #future_t = (t_samples + 1 + future_offset)[her_indexes]
+        future_t = (t_samples + future_offset)[her_indexes]
 
         # Replace goal with achieved goal but only for the previously-selected
         # HER transitions (as defined by her_indexes). For the other transitions,
         # keep the original goal.
-        future_ag = episode_batch['ag'][episode_idxs[her_indexes], future_t]
+        print("INDEX")
+        print(episode_idxs[her_indexes])
+        print(future_t)
+        future_ag = episode_batch['ag'][0][episode_idxs[her_indexes], future_t]
+        print(future_ag)
         transitions['g'][her_indexes] = future_ag
 
         # Reconstruct info dictionary for reward  computation.
