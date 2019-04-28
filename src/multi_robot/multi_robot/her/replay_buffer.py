@@ -54,12 +54,12 @@ class ReplayBuffer:
             assert self.current_size > 0
             for key in self.buffers.keys():
                 buffers[key] = self.buffers[key][:self.current_size]
-        print("PRINTING BUFFERS")
-        print(buffers['o'])
-        print("PRINTING BUFFERS 2")
-        print(buffers['ag'])
-        print("BUFFER SHAPES")
-        print(buffers['o'][0].shape)
+        #print("PRINTING BUFFERS")
+        #print(buffers['o'])
+        #print("PRINTING BUFFERS 2")
+        #print(buffers['ag'])
+        #print("BUFFER SHAPES")
+        #print(buffers['o'][0].shape)
         for key in buffers.keys():
             #print(key,buffers[key])
             buffers[key] = buffers[key][0]

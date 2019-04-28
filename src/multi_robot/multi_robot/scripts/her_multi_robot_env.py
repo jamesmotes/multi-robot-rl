@@ -70,8 +70,8 @@ class HERMultiRobotEnv(gazebo_env.GazeboEnv,utils.EzPickle):
         ))
 
     def discretize_observation(self,data,new_ranges):
-        print("DATA")
-        print(data)
+        # print("DATA")
+        # print(data)
         discretized_ranges = []
         min_range = 0.2
         done = False
@@ -104,11 +104,11 @@ class HERMultiRobotEnv(gazebo_env.GazeboEnv,utils.EzPickle):
         if distance < .2:
             done = True #crashed into each other
             reward = -10
-            print("TOO CLOSE")
+            # print("TOO CLOSE")
         elif distance > 5:
             done = True #too far apart
             reward = -5
-            print("TOO FAR APART")
+            # print("TOO FAR APART")
         elif distance < 1:
             reward = 10/distance
         else:
@@ -116,8 +116,8 @@ class HERMultiRobotEnv(gazebo_env.GazeboEnv,utils.EzPickle):
 
         if self.steps >= self.max_steps:
             done = True
-            print("REACHED MAX STEPS")
-            print(self.steps)
+            # print("REACHED MAX STEPS")
+            # print(self.steps)
             self.steps = 0
         return reward,done
 
@@ -175,9 +175,9 @@ class HERMultiRobotEnv(gazebo_env.GazeboEnv,utils.EzPickle):
 
     def step(self, action):
 
-        print("ACTION")
+        # print("ACTION")
         action = action.reshape((2,2))
-        print(action)
+        # print(action)
 
         self.steps += 1
 
@@ -266,7 +266,7 @@ class HERMultiRobotEnv(gazebo_env.GazeboEnv,utils.EzPickle):
             #resp_pause = pause.call()
             self.pause()
         except (rospy.ServiceException) as e:
-            print ("/gazebo/pause_physics service call failed")
+            # print ("/gazebo/pause_physics service call failed")
 
         #state,done = self.discretize_observation(results1,results2,5)
         reward,done = self.reward(results1,results2)
@@ -362,7 +362,7 @@ class HERMultiRobotEnv(gazebo_env.GazeboEnv,utils.EzPickle):
             'achieved_goal': achieved_goal.copy(),
             'desired_goal': self.goal.copy(),
         }
-        print(dictionary)
+        # print(dictionary)
         return dictionary
 
     def _sample_goal(self):

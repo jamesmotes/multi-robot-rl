@@ -52,10 +52,10 @@ class RolloutWorker:
         """Performs `rollout_batch_size` rollouts in parallel for time horizon `T` with the current
         policy acting on it accordingly.
         """
-        print("GENERATING EPISODE")
-        print("GENERATING EPISODE")
-        print("GENERATING EPISODE")
-        print("GENERATING EPISODE")
+        # print("GENERATING EPISODE")
+        # print("GENERATING EPISODE")
+        # print("GENERATING EPISODE")
+        # print("GENERATING EPISODE")
         self.reset_all_rollouts()
 
         # compute observations
@@ -142,10 +142,10 @@ class RolloutWorker:
             self.Q_history.append(np.mean(Qs))
         self.n_episodes += self.rollout_batch_size
 
-        print("GENERATED EPISODE")
-        print("GENERATED EPISODE")
-        print("GENERATED EPISODE")
-        print("GENERATED EPISODE")
+        # print("GENERATED EPISODE")
+        # print("GENERATED EPISODE")
+        # print("GENERATED EPISODE")
+        # print("GENERATED EPISODE")
         return convert_episode_to_batch_major(episode)
 
     def clear_history(self):

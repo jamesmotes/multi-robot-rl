@@ -25,10 +25,10 @@ def train(policy, rollout_worker, evaluator,
           save_path, demo_file, **kwargs):
     rank = MPI.COMM_WORLD.Get_rank()
 
-    print("STARTING TRAINING")
-    print("STARTING TRAINING")
-    print("STARTING TRAINING")
-    print("STARTING TRAINING")
+    # print("STARTING TRAINING")
+    # print("STARTING TRAINING")
+    # print("STARTING TRAINING")
+    # print("STARTING TRAINING")
 
     if save_path:
         latest_policy_path = os.path.join(save_path, 'policy_latest.pkl')
@@ -36,7 +36,7 @@ def train(policy, rollout_worker, evaluator,
         periodic_policy_path = os.path.join(save_path, 'policy_{}.pkl')
 
     logger.info("Training...")
-    print(n_epochs)
+    # print(n_epochs)
     best_success_rate = -1
 
     if policy.bc_loss == 1: policy.init_demo_buffer(demo_file) #initialize demo buffer if training with demonstrations
@@ -144,13 +144,13 @@ def learn(network, env, total_timesteps,
         logger.warn('****************')
         logger.warn()
 
-    print("GOT PAST WARNING")
-    print("GOT PAST WARNING")
-    print("GOT PAST WARNING")
+    # print("GOT PAST WARNING")
+    # print("GOT PAST WARNING")
+    # print("GOT PAST WARNING")
 
     dims = config.configure_dims(params,env)
     policy = config.configure_ddpg(dims=dims, params=params, env = env, clip_return=clip_return)
-    print("CONFIGURED POLICY")
+    # print("CONFIGURED POLICY")
     if load_path is not None:
         tf_util.load_variables(load_path)
 
@@ -177,19 +177,19 @@ def learn(network, env, total_timesteps,
     eval_env = eval_env or env
 
     rollout_worker = RolloutWorker(env, policy, dims, logger, monitor=True, **rollout_params)
-    print("INITIALIZED ROLLOUT WORKER")
+    # print("INITIALIZED ROLLOUT WORKER")
     evaluator = RolloutWorker(eval_env, policy, dims, logger, **eval_params)
-    print("INITIALIZED EVALUATOR")
+    # print("INITIALIZED EVALUATOR")
 
     n_cycles = params['n_cycles']
     n_epochs = total_timesteps // n_cycles // rollout_worker.T // rollout_worker.rollout_batch_size
 
 
-    print("EPOCH PARAMS")
-    print(total_timesteps)
-    print(n_cycles)
-    print(rollout_worker.T)
-    print(rollout_worker.rollout_batch_size)
+    # print("EPOCH PARAMS")
+    # print(total_timesteps)
+    # print(n_cycles)
+    # print(rollout_worker.T)
+    # print(rollout_worker.rollout_batch_size)
 
     return train(
         save_path=save_path, policy=policy, rollout_worker=rollout_worker,
