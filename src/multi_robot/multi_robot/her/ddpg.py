@@ -102,7 +102,7 @@ class DDPG(object):
         print(buffer_shapes['g'])
         #print(buffer_shapes['g'][0])
         print(self.dimg)
-        buffer_shapes['g'] = (buffer_shapes['g'], self.dimg)
+        buffer_shapes['g'] = (buffer_shapes['g'][0], self.dimg)
         buffer_shapes['ag'] = (self.T, self.dimg)
 
         buffer_size = (self.buffer_size // self.rollout_batch_size) * self.rollout_batch_size

@@ -45,7 +45,7 @@ def make_sample_her_transitions(replay_strategy, replay_k, reward_fun):
         print(episode_batch['ag_2'])
         print(episode_batch['u'])
         #T = episode_batch['u'][0].shape[0]
-        T = episode_batch['u'][0].shape[0]
+        T = episode_batch['u'][0].shape[1]
         #rollout_batch_size = episode_batch['u'][0].shape[0]
         rollout_batch_size = episode_batch['u'][0].shape[0]
         batch_size = batch_size_in_transitions
