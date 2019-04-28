@@ -28,14 +28,25 @@ def make_sample_her_transitions(replay_strategy, replay_k, reward_fun):
         print(episode_batch['u'][0].shape)
         print(episode_batch.keys())
 
-        episode_batch['ag'][0] = np.squeeze(episode_batch['ag'][0])
-        episode_batch['g'][0] = np.squeeze(episode_batch['g'][0])
-        episode_batch['o_2'][0] = np.squeeze(episode_batch['o_2'][0])
-        episode_batch['o'][0] = np.squeeze(episode_batch['o'][0])
-        episode_batch['ag_2'][0] = np.squeeze(episode_batch['ag_2'][0])
-        episode_batch['u'][0] = np.squeeze(episode_batch['u'][0])
+        #for key in episode_batch.keys():
+        #    if episode_batch[key][0].shape[0] == 1:
+        #        print("Shape == 1")
+        #        print(key,episode_batch[key][0])
+        #        episode_batch[key] = (episode_batch[key][0][1], episode_batch[key][0][2],)
+            #else:
+                #print("SHAPE != 1")
+                #print(key,episode_batch[key])
+                #episode_batch[key] = (episode_batch[key][0][0],episode_batch[key][0][1])
 
-        T = episode_batch['u'][0].shape[1]
+        print("EPISODE BATCH U")
+        print(episode_batch['ag'])
+        print(episode_batch['o_2'])
+        print(episode_batch['o'])
+        print(episode_batch['ag_2'])
+        print(episode_batch['u'])
+        #T = episode_batch['u'][0].shape[0]
+        T = episode_batch['u'][0].shape[0]
+        #rollout_batch_size = episode_batch['u'][0].shape[0]
         rollout_batch_size = episode_batch['u'][0].shape[0]
         batch_size = batch_size_in_transitions
 
@@ -47,6 +58,10 @@ def make_sample_her_transitions(replay_strategy, replay_k, reward_fun):
         print(batch_size)
         print(t_samples)
         print(T)
+        #print(episode_batch[key][0])
+        print(episode_batch['ag'][0][episode_idxs])
+        print(episode_batch['ag'][0][episode_idxs, t_samples])
+        #transitions = {key: episode_batch[key][0][episode_idxs, t_samples].copy()
         transitions = {key: episode_batch[key][0][episode_idxs, t_samples].copy()
                        for key in episode_batch.keys()}
 
@@ -64,7 +79,8 @@ def make_sample_her_transitions(replay_strategy, replay_k, reward_fun):
         print("INDEX")
         print(episode_idxs[her_indexes])
         print(future_t)
-        future_ag = episode_batch['ag'][0][episode_idxs[her_indexes], future_t]
+        #future_ag = episode_batch['ag'][0][episode_idxs[her_indexes], future_t]
+        future_ag = episode_batch['ag'][episode_idxs[her_indexes], future_t]
         print(future_ag)
         transitions['g'][her_indexes] = future_ag
 
