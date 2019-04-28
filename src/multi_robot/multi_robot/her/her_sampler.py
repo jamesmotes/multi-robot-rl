@@ -20,12 +20,12 @@ def make_sample_her_transitions(replay_strategy, replay_k, reward_fun):
         """episode_batch is {key: array(buffer_size x T x dim_key)}
         """
         print("EPISODE BATCH U")
-        print(episode_batch['ag'][0].shape)
-        print(episode_batch['g'][0].shape)
-        print(episode_batch['o_2'][0].shape)
-        print(episode_batch['o'][0].shape)
-        print(episode_batch['ag_2'][0].shape)
-        print(episode_batch['u'][0].shape)
+        print(episode_batch['ag'].shape)
+        print(episode_batch['g'].shape)
+        print(episode_batch['o_2'].shape)
+        print(episode_batch['o'].shape)
+        print(episode_batch['ag_2'].shape)
+        print(episode_batch['u'].shape)
         print(episode_batch.keys())
 
         #for key in episode_batch.keys():
@@ -47,22 +47,22 @@ def make_sample_her_transitions(replay_strategy, replay_k, reward_fun):
         #T = episode_batch['u'][0].shape[0]
         T = episode_batch['u'][0].shape[1]
         #rollout_batch_size = episode_batch['u'][0].shape[0]
-        rollout_batch_size = episode_batch['u'][0].shape[0]
+        rollout_batch_size = episode_batch['u'].shape[0]
         batch_size = batch_size_in_transitions
 
         # Select which episodes and time steps to use.
         episode_idxs = np.random.randint(0, rollout_batch_size, batch_size)
         t_samples = np.random.randint(T, size=batch_size)
-        print(episode_idxs)
+        #print(episode_idxs)
         print(rollout_batch_size)
         print(batch_size)
-        print(t_samples)
+        #print(t_samples)
         print(T)
         #print(episode_batch[key][0])
-        print(episode_batch['ag'][0][episode_idxs])
-        print(episode_batch['ag'][0][episode_idxs, t_samples])
+        #print(episode_batch['ag'][0][episode_idxs])
+        #print(episode_batch['ag'][0][episode_idxs, t_samples])
         #transitions = {key: episode_batch[key][0][episode_idxs, t_samples].copy()
-        transitions = {key: episode_batch[key][0][episode_idxs, t_samples].copy()
+        transitions = {key: episode_batch[key][episode_idxs, t_samples].copy()
                        for key in episode_batch.keys()}
 
         # Select future time indexes proportional with probability future_p. These
