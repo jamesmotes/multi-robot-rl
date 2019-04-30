@@ -96,13 +96,13 @@ class DDPG(object):
             self._create_network(reuse=reuse)
 
         # Configure the replay buffer.
-        buffer_shapes = {key: (self.T-1 if key != 'o' else (self.T,) + input_shapes[key])
+        buffer_shapes = {key: ((self.T-1,) if key != 'o' else (self.T,) + input_shapes[key])
                          for key, val in input_shapes.items()}
-        print(buffer_shapes)
-        print(buffer_shapes['g'])
-        #print(buffer_shapes['g'][0])
-        print(self.dimg)
-        buffer_shapes['g'] = (buffer_shapes['g'], self.dimg)
+        # print(buffer_shapes)
+        # print(buffer_shapes['g'])
+        # #print(buffer_shapes['g'][0])
+        # print(self.dimg)
+        buffer_shapes['g'] = (buffer_shapes['g'][0], self.dimg)
         buffer_shapes['ag'] = (self.T, self.dimg)
 
         buffer_size = (self.buffer_size // self.rollout_batch_size) * self.rollout_batch_size
@@ -139,25 +139,25 @@ class DDPG(object):
         if compute_Q:
             vals += [policy.Q_pi_tf]
         # feed
-        print("G")
-        print(g)
-        zeros = np.zeros([13,1], np.float64)
-        g = np.concatenate((g,zeros),axis=0)
-        print(g)
+        # print("G")
+        # print(g)
+        #zeros = np.zeros([13,1], np.float64)
+        #g = np.concatenate((g,zeros),axis=0)
+        #print(g)
         feed = {
             policy.o_tf: o.reshape(-1, self.dimo),
-            #policy.g_tf: g.reshape(-1, self.dimg),
-            policy.g_tf: g,
+            policy.g_tf: g.reshape(-1, self.dimg),
+            #policy.g_tf: g,
             policy.u_tf: np.zeros((o.size // self.dimo, self.dimu), dtype=np.float32)
         }
 
-        print("VALS")
-        print(vals)
+        # print("VALS")
+        # print(vals)
         #print("REDUCED VALS")
         #vals[0] = tf.reduce_sum(vals[0],0,keepdims=True)
         #print(vals)
-        print("FEED")
-        print(feed)
+        # print("FEED")
+        # print(feed)
 
         ret = self.sess.run(vals, feed_dict=feed)
         # action postprocessing

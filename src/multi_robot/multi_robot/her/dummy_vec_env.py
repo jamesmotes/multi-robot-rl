@@ -47,7 +47,13 @@ class DummyVecEnv(VecEnv):
             # if isinstance(self.envs[e].action_space, spaces.Discrete):
             #    action = int(action)
 
+            #stepResults = self.envs[e].step(action)
+            #print(stepResults)
             obs, self.buf_rews[e], self.buf_dones[e], self.buf_infos[e] = self.envs[e].step(action)
+            #obs, _, _, _ = stepResults # = self.envs[e].step(action)
+            #_, self.buf_rews[e], _, _ = stepResults # = self.envs[e].step(action)
+            #_,_, self.buf_dones[e], _ = stepResults # = self.envs[e].step(action)
+            #_, _, _, self.buf_infos[e] = stepResults # = self.envs[e].step(action)
             if self.buf_dones[e]:
                 obs = self.envs[e].reset()
             self._save_obs(e, obs)
@@ -62,16 +68,16 @@ class DummyVecEnv(VecEnv):
         return self._obs_from_buf()
 
     def _save_obs(self, e, obs):
-        print(e)
-        print(self.keys)
+        #print(e)
+        #print(self.keys)
         for k in self.keys:
             if k is None:
                 self.buf_obs[k][e] = obs
             else:
-                print("K")
-                print(k)
-                print("OBS")
-                print(obs)
+                #print("K")
+                #print(k)
+                #print("OBS")
+                #print(obs)
                 self.buf_obs[k][e] = obs[k]
 
     def _obs_from_buf(self):

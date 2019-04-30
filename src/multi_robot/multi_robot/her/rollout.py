@@ -52,18 +52,19 @@ class RolloutWorker:
         """Performs `rollout_batch_size` rollouts in parallel for time horizon `T` with the current
         policy acting on it accordingly.
         """
-        print("GENERATING EPISODE")
-        print("GENERATING EPISODE")
-        print("GENERATING EPISODE")
-        print("GENERATING EPISODE")
+        # print("GENERATING EPISODE")
+        # print("GENERATING EPISODE")
+        # print("GENERATING EPISODE")
+        # print("GENERATING EPISODE")
         self.reset_all_rollouts()
 
         # compute observations
         #o = np.empty((self.rollout_batch_size, self.dims['o']), np.float32)  # observations
-        o = np.empty((self.rollout_batch_size, 14), np.float32)  # observations
-        ag = np.empty((self.rollout_batch_size, self.dims['g']), np.float32)  # achieved goals
-        print(o)
-        print(self.initial_o)
+        o = np.empty((self.rollout_batch_size, 4), np.float32)  # observations
+        #ag = np.empty((self.rollout_batch_size, self.dims['g']), np.float32)  # achieved goals
+        ag = np.empty((self.rollout_batch_size, 4), np.float32)  # achieved goals
+        #print(o)
+        #print(self.initial_o)
         o[:] = self.initial_o
         ag[:] = self.initial_ag
 
@@ -124,7 +125,8 @@ class RolloutWorker:
             ag[...] = ag_new
         obs.append(o.copy())
         achieved_goals.append(ag.copy())
-
+        
+        print(self.venv.compute_reward(ag.copy(),self.g.copy(),{}))
         episode = dict(o=obs,
                        u=acts,
                        g=goals,
@@ -141,10 +143,10 @@ class RolloutWorker:
             self.Q_history.append(np.mean(Qs))
         self.n_episodes += self.rollout_batch_size
 
-        print("GENERATED EPISODE")
-        print("GENERATED EPISODE")
-        print("GENERATED EPISODE")
-        print("GENERATED EPISODE")
+        # print("GENERATED EPISODE")
+        # print("GENERATED EPISODE")
+        # print("GENERATED EPISODE")
+        # print("GENERATED EPISODE")
         return convert_episode_to_batch_major(episode)
 
     def clear_history(self):

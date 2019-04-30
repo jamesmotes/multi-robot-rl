@@ -36,7 +36,7 @@ if __name__ == '__main__':
     env = gym.make('HERMultiRobot-v0')
 
 
-    outdir = '~/multi_robot-rl/src/output'
+    outdir = '~/multi_robot-rl/src/second_output'
     env = gym.wrappers.Monitor(env, outdir, force=True)
 
     plotter = liveplot.LivePlot(outdir)

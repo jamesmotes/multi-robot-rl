@@ -1,0 +1,8 @@
+prefix=/home/james/multi-robot-rl/devel
+
+Name: fetch_train
+Description: Description of fetch_train
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/james/multi-robot-rl/devel/lib 
+Requires: 

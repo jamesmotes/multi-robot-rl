@@ -82,7 +82,8 @@ def train(args, extra_args):
         env=env,
         seed=seed,
         total_timesteps=total_timesteps,
-        **alg_kwargs
+        save_path=args.save_path
+        **alg_kwargs,
     )
 
     return model, env

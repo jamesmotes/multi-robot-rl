@@ -20,19 +20,20 @@ class ReplayBuffer:
         self.sample_transitions = sample_transitions
 
         # self.buffers is {key: array(size_in_episodes x T or T+1 x dim_key)}
-        print(self.buffer_shapes)
-        print(self.size)
-        #self.buffers = {key: np.empty([(self.size,) + shape])
-        #                for key, shape in buffer_shapes.items()}
+        #print(self.buffer_shapes)
+        #print("SELF.SIZE OF REPLAY BUFFER")
+        #print(self.size)
+        #self.buffers = {key: np.empty([self.size, *item])
+        #                for key, item in buffer_shapes.items()}
 
         self.buffers = {}
         for key, shape in buffer_shapes.items():
+            #print(key)
             if key == 'u':
-                tup = (self.size,) + (shape,)
+                self.buffers[key] = np.empty([self.size, shape[0]])
             else:
-                tup = (self.size,) + shape
-            self.buffers[key] = tup
-
+                self.buffers[key] = np.empty([self.size, shape[0], shape[1]])
+            
         # memory management
         self.current_size = 0
         self.n_transitions_stored = 0
@@ -53,7 +54,15 @@ class ReplayBuffer:
             assert self.current_size > 0
             for key in self.buffers.keys():
                 buffers[key] = self.buffers[key][:self.current_size]
-
+        #print("PRINTING BUFFERS")
+        #print(buffers['o'])
+        #print("PRINTING BUFFERS 2")
+        #print(buffers['ag'])
+        #print("BUFFER SHAPES")
+        #print(buffers['o'][0].shape)
+        for key in buffers.keys():
+            #print(key,buffers[key])
+            buffers[key] = buffers[key][0]
         buffers['o_2'] = buffers['o'][:, 1:, :]
         buffers['ag_2'] = buffers['ag'][:, 1:, :]
 
@@ -76,7 +85,11 @@ class ReplayBuffer:
 
             # load inputs into buffers
             for key in self.buffers.keys():
-                self.buffers[key][idxs] = episode_batch[key]
+                #self.buffers[key][idxs] = episode_batch[key]
+                l = list(self.buffers[key])
+                l[idxs] = episode_batch[key]
+                t = tuple(l)
+                self.buffers[key] = t
 
             self.n_transitions_stored += batch_size * self.T
 
