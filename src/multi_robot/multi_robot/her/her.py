@@ -29,14 +29,17 @@ def train(policy, rollout_worker, evaluator,
     # print("STARTING TRAINING")
     # print("STARTING TRAINING")
     # print("STARTING TRAINING")
-
+    
     if save_path:
+        save_path = os.getcwd()
         latest_policy_path = os.path.join(save_path, 'policy_latest.pkl')
         best_policy_path = os.path.join(save_path, 'policy_best.pkl')
         periodic_policy_path = os.path.join(save_path, 'policy_{}.pkl')
+        print("SAVE PATH")
 
     logger.info("Training...")
     print(n_epochs)
+    print(rank)
     best_success_rate = -1
 
     if policy.bc_loss == 1: policy.init_demo_buffer(demo_file) #initialize demo buffer if training with demonstrations
@@ -148,11 +151,18 @@ def learn(network, env, total_timesteps,
     # print("GOT PAST WARNING")
     # print("GOT PAST WARNING")
 
+    reuse = False;
+    if load_path is not None:
+        reuse = True
+
     dims = config.configure_dims(params,env)
-    policy = config.configure_ddpg(dims=dims, params=params, env = env, clip_return=clip_return)
+    #policy = config.configure_ddpg(dims=dims, params=params, env = env, clip_return=clip_return, reuse=reuse)
     # print("CONFIGURED POLICY")
     if load_path is not None:
+        load_path = os.path.join(os.getcwd(), 'policy_latest.pkl')
         tf_util.load_variables(load_path)
+
+    policy = config.configure_ddpg(dims=dims, params=params, env = env, clip_return=clip_return, reuse=reuse)
 
     rollout_params = {
         'exploit': False,

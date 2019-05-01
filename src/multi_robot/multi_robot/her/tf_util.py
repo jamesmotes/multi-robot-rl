@@ -351,7 +351,9 @@ def save_variables(save_path, variables=None, sess=None):
     save_dict = {v.name: value for v, value in zip(variables, ps)}
     dirname = os.path.dirname(save_path)
     if any(dirname):
-        os.makedirs(dirname, exist_ok=True)
+        #os.makedirs(dirname, exist_ok=True)
+        if not os.path.isdir(dirname):
+            os.makedirs(dirname)
     joblib.dump(save_dict, save_path)
 
 def load_variables(load_path, variables=None, sess=None):
