@@ -282,8 +282,11 @@ class HERMultiRobotEnv(gazebo_env.GazeboEnv,utils.EzPickle):
         obs = self._get_obs()
         done = self._is_done(obs)
         reward = self._compute_reward(obs,done)
+        info = {}
+        if self.is_successful(obs):
+            info['is_success'] = 1.0
 
-        return obs, reward, done, {}
+        return obs, reward, done, info
 
     def reset(self):
 
@@ -398,6 +401,9 @@ class HERMultiRobotEnv(gazebo_env.GazeboEnv,utils.EzPickle):
         d = self.goal_distance(observations['achieved_goal'], self.goal)
         #d = d[0]# + d[1] 
         return (d <= 1).astype(np.float32)
+
+    def is_successful(self, observations):
+        return self._is_done(observations) 
 
     def _compute_reward(self, observations, done):
 

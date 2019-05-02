@@ -4,6 +4,7 @@ import click
 import numpy as np
 import json
 from mpi4py import MPI
+import tensorflow as tf
 
 import logger
 from misc_utils import set_global_seeds
@@ -32,9 +33,9 @@ def train(policy, rollout_worker, evaluator,
     
     if save_path:
         save_path = os.getcwd()
-        latest_policy_path = os.path.join(save_path, 'policy_latest.pkl')
-        best_policy_path = os.path.join(save_path, 'policy_best.pkl')
-        periodic_policy_path = os.path.join(save_path, 'policy_{}.pkl')
+        latest_policy_path = os.path.join(save_path, 'ddpg_policy_latest.pkl')
+        best_policy_path = os.path.join(save_path, 'ddpg_policy_best.pkl')
+        periodic_policy_path = os.path.join(save_path, 'ddpg_policy_{}.pkl')
         print("SAVE PATH")
 
     logger.info("Training...")
@@ -151,18 +152,19 @@ def learn(network, env, total_timesteps,
     # print("GOT PAST WARNING")
     # print("GOT PAST WARNING")
 
-    reuse = False;
-    if load_path is not None:
-        reuse = True
+    #reuse = False;
+    #if load_path is not None:
+    #    reuse = tf.AUTO_REUSE
 
     dims = config.configure_dims(params,env)
     #policy = config.configure_ddpg(dims=dims, params=params, env = env, clip_return=clip_return, reuse=reuse)
     # print("CONFIGURED POLICY")
     if load_path is not None:
-        load_path = os.path.join(os.getcwd(), 'policy_latest.pkl')
+        #load_path = os.path.join(os.getcwd(), 'policy_latest.pkl')
         tf_util.load_variables(load_path)
 
-    policy = config.configure_ddpg(dims=dims, params=params, env = env, clip_return=clip_return, reuse=reuse)
+    #reuse = tf.AUTO_REUSE
+    policy = config.configure_ddpg(dims=dims, params=params, env = env, clip_return=clip_return)#, reuse=reuse)
 
     rollout_params = {
         'exploit': False,
